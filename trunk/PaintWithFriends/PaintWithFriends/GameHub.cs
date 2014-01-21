@@ -8,6 +8,14 @@ namespace PaintWithFriends
 {
     public class GameHub : Hub
     {
+        public class segment
+        {
+            public int x_from { get; set; }
+            public int y_from { get; set; }
+            public int x_to { get; set; }
+            public int y_to { get; set; }
+        }
+
         public void Hello()
         {
             Clients.All.hello();
@@ -15,9 +23,23 @@ namespace PaintWithFriends
 
         public override System.Threading.Tasks.Task OnConnected()
         {
-            //Hello();
+            return Clients.Caller.hello("Hello from the server");
+        }
 
-            return Clients.Caller.hello();
+        public void Clear()
+        {
+            Clients.AllExcept(new string[] { Context.ConnectionId }).clear();
+        }
+
+        public void DrawSegment(int x_from, int y_from, int x_to, int y_to)
+        {
+            Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegment(x_from, y_from, x_to, y_to);
+            Clients.All.messageFromServer("test");
+        }
+
+        public void PushSegmentArray(segment[] segments)
+        {
+            Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegments(segments);
         }
     }
 }
