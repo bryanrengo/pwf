@@ -63,7 +63,7 @@ $(function () {
             mousedown_drawaction(e, this);
         });
         _c.canvas.mousemove(function (e) {
-            mousemove_drawaction(e);
+            mousemove_drawaction(e, this);
         });
         $("#clearButton").removeAttr('disabled');
         _c.canvas.css('cursor', 'crosshair');
@@ -97,9 +97,9 @@ $(function () {
         _c.lastPoint.y = (e.pageY - parentOffset.top);
     }
 
-    function mousemove_drawaction(e) {
+    function mousemove_drawaction(e, o) {
         if (_c.mouseclicked) {
-            var parentOffset = $(this).parent().offset();
+            var parentOffset = $(o).parent().offset();
             var rx = (e.pageX - parentOffset.left);
             var ry = (e.pageY - parentOffset.top);
 
