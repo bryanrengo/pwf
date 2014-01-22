@@ -4,7 +4,7 @@ $(function () {
     $('#joinButton').attr('disabled', 'disabled');
 
     _c.canvasElement = $("#canvas")[0];//same as document.getElementById
-    _c.canvas = canvasElement.getContext("2d");
+    _c.canvas = _c.canvasElement.getContext("2d");
     _c.lastPoint = {};
     _c.gameHub = $.connection.gameHub;
     _c.segments = [];
