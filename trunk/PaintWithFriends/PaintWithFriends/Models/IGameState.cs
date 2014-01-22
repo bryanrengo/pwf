@@ -9,7 +9,9 @@ namespace PaintWithFriends.Models
     public interface IGameState
     {
         Player GetPlayer(string connectionId, string playerName);
-        Player GetPlayer(string connectionId, int id);
+        Player GetPlayer(string connectionId);
+        void RemovePlayer(string connectionId);
+        Game GetGame(Player player);
         bool IsMatch(string connectionId, string match);
     }
 }
