@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using PaintWithFriends.Models;
 
 namespace PaintWithFriends
 {
@@ -40,6 +41,13 @@ namespace PaintWithFriends
         public void PushSegmentArray(segment[] segments)
         {
             Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegments(segments);
+        }
+
+        public bool Join(string name)
+        {
+            Player player = GameState.Instance.GetPlayer(Context.ConnectionId, name);
+
+            return player != null;
         }
     }
 }

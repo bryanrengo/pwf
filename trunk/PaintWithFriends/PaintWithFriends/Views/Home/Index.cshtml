@@ -10,15 +10,21 @@
 
 <div style="padding:10px;">
     <div id="canvasDiv">
-        <canvas id="canvas" width="400" height="500" style="border:solid 1px black;cursor:crosshair;"/>
+        <canvas id="canvas" width="500" height="500" style="border:solid 1px black;cursor:crosshair;"></canvas>
     </div>
 </div>
+
 <input type="button" value="clear" id="clearButton" />
+
+<input type="text" id="playerText" />
+<input type="button" value="join" id="joinButton" />
 
 <script>
     _c = typeof (_c) == "undefined" ? {} : _c;
 
     $(function () {
+        $('#joinButton').attr('disabled', 'disabled');
+
         _c.canvas = $("#canvas")[0];//same as document.getElementById
         _c.ctx = canvas.getContext("2d");
         _c.last = {};
@@ -28,6 +34,20 @@
         setInterval(function () { doSegmentPush() }, 50);
 
         $.connection.hub.start().done(function () {
+            $('#joinButton').removeAttr('disabled');
+        });
+
+        $('#joinButton').click(function () {
+            var playerName = $('#playerText').val();
+
+            _c.player = playerName;
+
+            _c.gameHub.server.join(playerName).done(function (isPlayer) {
+                if (isPlayer) {
+                    $('#joinButton').attr('disabled', 'disabled');
+                    $('#playerText').attr('disabled', 'disabled');
+                }
+            })
         });
 
         _c.gameHub.client.drawSegment = function (x_from, y_from, x_to, y_to)
@@ -64,7 +84,7 @@
         });
 
         function clearCanvas() {
-            _c.ctx.clearRect(0, 0, 400, 500);
+            _c.ctx.clearRect(0, 0, _c.canvas.width, _c.canvas.height);
         }
 
         $("#canvas").mouseup(function (e) {
