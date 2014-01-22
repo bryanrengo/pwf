@@ -90,11 +90,17 @@ namespace PaintWithFriends.Models
         {
             Player playerToRemove = this.GetPlayer(connectionId);
 
-            Game playerGame = playerToRemove.Game;
+            if (playerToRemove != null)
+            {
+                Game playerGame = playerToRemove.Game;
 
-            Player removedPlayer;
+                Player removedPlayer;
 
-            playerGame.Players.TryRemove(playerToRemove.ConnectionId, out removedPlayer);
+                if (playerGame != null)
+                {
+                    playerGame.Players.TryRemove(playerToRemove.ConnectionId, out removedPlayer);
+                }
+            }
         }
     }
 }

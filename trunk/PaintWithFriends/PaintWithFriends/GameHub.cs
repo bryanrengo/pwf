@@ -63,7 +63,7 @@ namespace PaintWithFriends
             else
             {
                 // tell everyone we're waiting for more players
-                Clients.Group(game.GroupId).waitingForPlayers();
+                Clients.Group(game.GroupId).enableDrawing();
             }
 
             return player != null;
