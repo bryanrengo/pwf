@@ -43,11 +43,46 @@ namespace PaintWithFriends
             Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegments(segments);
         }
 
-        public bool Join(string name)
+        public bool Join(string playerName)
         {
-            Player player = GameState.Instance.GetPlayer(Context.ConnectionId, name);
+            Player player = GameState.Instance.GetPlayer(Context.ConnectionId, playerName);
+
+            Game game = null;
+
+            if (player.Game == null)
+            {
+                game = GameState.Instance.GetGame(player);
+
+            }
+
+            if (game.Players.Count >= 3)
+            {
+                // can start game if player count is 3 or more
+                Clients.Client(game.Drawer.ConnectionId).enableStart();
+            }
+            else
+            {
+                // tell everyone we're waiting for more players
+                Clients.Group(game.GroupId).waitingForPlayers();
+            }
 
             return player != null;
+        }
+
+        public bool Start(string groupId)
+        {
+            var connectionId = Context.ConnectionId;
+
+            Clients.Group(groupId).startGame(connectionId, 60);
+
+            return true;
+        }
+
+        public override System.Threading.Tasks.Task OnDisconnected()
+        {
+            GameState.Instance.RemovePlayer(Context.ConnectionId);
+
+            return base.OnDisconnected();
         }
     }
 }

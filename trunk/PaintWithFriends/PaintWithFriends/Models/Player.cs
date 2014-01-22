@@ -7,15 +7,15 @@ namespace PaintWithFriends.Models
 {
     public class Player
     {
-        public Player(string id, string name)
+        public Player(string connectionId, string name)
         {
-            this.Id = id;
+            this.ConnectionId = connectionId;
             this.Name = name;
             this.IsDrawing = false;
             this.IsPlaying = false;
         }
 
-        public string Id { get; set; }
+        public string ConnectionId { get; set; }
         public string Name { get; set; }
         public Game Game { get; set; }
         
