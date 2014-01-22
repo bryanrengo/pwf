@@ -60,7 +60,7 @@ $(function () {
             mouseup_drawaction(e);
         });
         _c.canvas.mousedown(function (e) {
-            mousedown_drawaction(e);
+            mousedown_drawaction(e, this);
         });
         _c.canvas.mousemove(function (e) {
             mousemove_drawaction(e);
@@ -90,9 +90,9 @@ $(function () {
         if (e.which === 1) _c.mouseclicked = false;
     }
 
-    function mousedown_drawaction(e) {
+    function mousedown_drawaction(e, o) {
         if (e.which === 1) _c.mouseclicked = true;
-        var parentOffset = $(this).parent().offset();
+        var parentOffset = $(o).parent().offset();
         _c.lastPoint.x = (e.pageX - parentOffset.left);
         _c.lastPoint.y = (e.pageY - parentOffset.top);
     }
