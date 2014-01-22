@@ -33,6 +33,8 @@ namespace PaintWithFriends.Models
         {
             Player player = _players.GetOrAdd(playerName, new Player(connectionId, playerName));
 
+            // wire up the new game or join game
+            
             return player;
         }
 

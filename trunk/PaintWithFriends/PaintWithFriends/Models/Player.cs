@@ -18,7 +18,15 @@ namespace PaintWithFriends.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public Game Game { get; set; }
+        
+        /// <summary>
+        /// IsPlaying; this Player has joined a game
+        /// </summary>
         public bool IsPlaying { get; set; }
+
+        /// <summary>
+        /// IsDrawing; this Player is drawing
+        /// </summary>
         public bool IsDrawing { get; set; }
     }
 }
