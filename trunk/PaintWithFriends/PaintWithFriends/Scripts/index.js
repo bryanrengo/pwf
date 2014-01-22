@@ -103,11 +103,11 @@ $(function () {
             var rx = (e.pageX - parentOffset.left);
             var ry = (e.pageY - parentOffset.top);
 
-            _c.canvas.lineWidth = "1.0";
-            _c.canvas.beginPath();
-            _c.canvas.moveTo(_c.lastPoint.x, _c.lastPoint.y);
-            _c.canvas.lineTo(rx, ry);
-            _c.canvas.stroke();
+            _c.canvasContext.lineWidth = "1.0";
+            _c.canvasContext.beginPath();
+            _c.canvasContext.moveTo(_c.lastPoint.x, _c.lastPoint.y);
+            _c.canvasContext.lineTo(rx, ry);
+            _c.canvasContext.stroke();
 
             addSegment(_c.lastPoint.x, _c.lastPoint.y, rx, ry);
 
