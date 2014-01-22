@@ -3,8 +3,9 @@
 $(function () {
     $('#joinButton').attr('disabled', 'disabled');
 
-    _c.canvasElement = $("#canvas")[0];//same as document.getElementById
-    _c.canvas = _c.canvasElement.getContext("2d");
+    _c.canvas = $("#canvas");
+    _c.canvasElement = _c.canvas[0];//same as document.getElementById
+    _c.canvasContext = _c.canvasElement.getContext("2d");
     _c.lastPoint = {};
     _c.gameHub = $.connection.gameHub;
     _c.segments = [];
@@ -29,20 +30,20 @@ $(function () {
     });
 
     _c.gameHub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
-        _c.canvas.lineWidth = "1.0";
-        _c.canvas.beginPath();
-        _c.canvas.moveTo(x_from, y_from);
-        _c.canvas.lineTo(x_to, y_to);
-        _c.canvas.stroke();
+        _c.canvasContext.lineWidth = "1.0";
+        _c.canvasContext.beginPath();
+        _c.canvasContext.moveTo(x_from, y_from);
+        _c.canvasContext.lineTo(x_to, y_to);
+        _c.canvasContext.stroke();
     }
 
     _c.gameHub.client.drawSegments = function (segments) {
         for (var i = 0; i < segments.length; i++) {
-            _c.canvas.lineWidth = "1.0";
-            _c.canvas.beginPath();
-            _c.canvas.moveTo(segments[i].x_from, segments[i].y_from);
-            _c.canvas.lineTo(segments[i].x_to, segments[i].y_to);
-            _c.canvas.stroke();
+            _c.canvasContext.lineWidth = "1.0";
+            _c.canvasContext.beginPath();
+            _c.canvasContext.moveTo(segments[i].x_from, segments[i].y_from);
+            _c.canvasContext.lineTo(segments[i].x_to, segments[i].y_to);
+            _c.canvasContext.stroke();
         }
     }
 
