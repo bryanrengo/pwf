@@ -14,5 +14,6 @@ namespace PaintWithFriends.Models
         bool IsRunning { get; set; }
         Player Drawer { get; set; }
         ConcurrentDictionary<string, Player> Players { get; set; }
+        bool Guess(string guess);
     }
 }

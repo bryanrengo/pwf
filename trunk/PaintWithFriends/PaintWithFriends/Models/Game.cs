@@ -13,6 +13,7 @@ namespace PaintWithFriends.Models
             this.GroupId = groupId;
             this.Players = new ConcurrentDictionary<string, Player>();
             this.IsRunning = false;
+            this.Match = "frog";
         }
 
         public string GroupId { get; set; }
@@ -20,5 +21,10 @@ namespace PaintWithFriends.Models
         public bool IsRunning { get; set; }
         public Player Drawer { get; set; }
         public ConcurrentDictionary<string, Player> Players { get; set; }
+
+        public bool Guess(string guess)
+        {
+            return string.Equals(guess, this.Match, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

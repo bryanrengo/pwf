@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using PaintWithFriends.Models;
+using System.Threading.Tasks;
 
 namespace PaintWithFriends
 {
@@ -63,22 +64,47 @@ namespace PaintWithFriends
             else
             {
                 // tell everyone we're waiting for more players
-                Clients.Group(game.GroupId).enableDrawing();
+                // Clients.Group(game.GroupId).enableDrawing();
             }
+
+            Clients.Caller.playerId = player.ConnectionId;
 
             return player != null;
         }
 
-        public bool Start(string groupId)
+        public bool Start()
         {
             var connectionId = Context.ConnectionId;
 
-            Clients.Group(groupId).startGame(connectionId, 60);
+            Game game = GameState.Instance.GetGame(connectionId);
+
+            if (game != null)
+            {
+                Clients.Client(game.Drawer.ConnectionId).enableDrawing(60);
+
+                Clients.Group(game.GroupId, game.Drawer.ConnectionId).startGame(60);
+            }
 
             return true;
         }
 
-        public override System.Threading.Tasks.Task OnDisconnected()
+        public bool Guess(string guess)
+        {
+            string connectionId = Context.ConnectionId;
+
+            Game game = GameState.Instance.GetGame(connectionId);
+
+            if (game.Guess(guess))
+            {
+                Player winner = GameState.Instance.GetPlayer(connectionId);
+
+                Clients.Group(game.GroupId).endGame(winner.Name);
+            }
+
+            return true;
+        }
+
+        public override Task OnDisconnected()
         {
             GameState.Instance.RemovePlayer(Context.ConnectionId);
 

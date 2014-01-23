@@ -86,6 +86,13 @@ namespace PaintWithFriends.Models
             return game;
         }
 
+        public Game GetGame(string connectionId)
+        {
+            Player currentPlayer = this.GetPlayer(connectionId);
+
+            return currentPlayer.Game;
+        }
+
         public void RemovePlayer(string connectionId)
         {
             Player playerToRemove = this.GetPlayer(connectionId);

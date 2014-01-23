@@ -2,6 +2,7 @@
 
 $(function () {
     $('#joinButton').attr('disabled', 'disabled');
+    $('#startButton').attr('disabled', 'disabled');
 
     _c.canvas = $("#canvas");
     _c.canvasElement = _c.canvas[0];//same as document.getElementById
@@ -9,6 +10,7 @@ $(function () {
     _c.lastPoint = {};
     _c.gameHub = $.connection.gameHub;
     _c.segments = [];
+    _c.playerId = "";
 
     setInterval(function () { doSegmentPush() }, 50);
 
@@ -23,11 +25,36 @@ $(function () {
 
         _c.gameHub.server.join(playerName).done(function (isPlayer) {
             if (isPlayer) {
+                _c.playerId = _c.gameHub.state.playerId;
                 $('#joinButton').attr('disabled', 'disabled');
                 $('#playerText').attr('disabled', 'disabled');
             }
         })
     });
+
+    $('#startButton').click(function () {
+        _c.gameHub.server.start();
+    });
+
+    $('#guessButton').click(function () {
+        var guess = $('#guessText').val();
+        _c.gameHub.server.guess(guess);
+    });
+
+    _c.gameHub.client.enableStart = function () {
+        // user who can start the game gets this message
+        $('#startButton').removeAttr('disabled');
+
+        console.log('you can start the game');
+    };
+
+    _c.gameHub.client.endGame = function (winner) {
+        alert(winner + " has won!");
+    };
+
+    _c.gameHub.client.startGame = function (interval) {
+        console.log('set the timer interval for guessing and drawing');
+    };
 
     _c.gameHub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
         _c.canvasContext.lineWidth = "1.0";
@@ -55,7 +82,12 @@ $(function () {
         console.log(s);
     }
 
-    _c.gameHub.client.enableDrawing = function () {
+    $("#clearButton").click(function () {
+        clearCanvas();
+        _c.gameHub.server.clear();
+    });
+
+    _c.gameHub.client.enableDrawing = function (interval) {
         _c.canvas.mouseup(function (e) {
             mouseup_drawaction(e);
         });
@@ -76,11 +108,6 @@ $(function () {
         $("#clearButton").attr('disabled', 'disabled');
         _c.canvas.css('cursor', 'pointer');
     }
-
-    $("#clearButton").click(function () {
-        clearCanvas();
-        _c.gameHub.server.clear();
-    });
 
     function clearCanvas() {
         _c.canvas.clearRect(0, 0, _c.canvas.width, _c.canvas.height);
