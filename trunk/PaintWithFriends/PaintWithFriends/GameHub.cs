@@ -44,6 +44,18 @@ namespace PaintWithFriends
             Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegments(segments);
         }
 
+        public void PushSegmentArrayNoJson(int[] coords)
+        {
+            int cnt = (int)(coords.Length / 4.0);
+            var segments = new segment[cnt];
+            int j = 0;
+            for (int i = 0; i < coords.Length; i += 4)
+            {
+                segments[j++] = new segment() { x_from = coords[i], y_from = coords[i + 1], x_to = coords[i + 2], y_to = coords[i + 3] };
+            }
+            PushSegmentArray(segments);
+        }
+
         public bool Join(string playerName)
         {
             Player player = GameState.Instance.GetPlayer(Context.ConnectionId, playerName);
