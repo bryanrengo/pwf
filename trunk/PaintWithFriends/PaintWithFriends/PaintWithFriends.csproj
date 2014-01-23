@@ -220,6 +220,8 @@
     <Content Include="Content\Site.css" />
     <None Include="Properties\PublishProfiles\purplemonkeydishwasher.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="loaderio-7367fc1772b743cc4e84a690b03ca771.html" />
+    <Content Include="loaderio-7367fc1772b743cc4e84a690b03ca771.txt" />
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
