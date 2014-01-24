@@ -152,9 +152,24 @@ $(function () {
         _c.segments.push(seg);
     }
 
+    //We can't just push the array of segments to the server becasue IE 11 (for scott hill's system anyway)
+    //was silently failing to complete the operation, so we package them up into a single dimension array
+    //which seems to work just fine. This also puts less strain the ther server.
+    //QUESTION: should we just use a single dimension array everywhere for performance?
     function doSegmentPush() {
         if (_c.segments.length > 0) {
-            _c.gameHub.server.pushSegmentArray(_c.segments);
+            var a = [];
+            for (var i = 0; i < _c.segments.length; i++) {
+                a.push(_c.segments[i].x_from | 0);//use quick truncate so server side only has to deal with ints
+                a.push(_c.segments[i].y_from | 0);
+                a.push(_c.segments[i].x_to | 0);
+                a.push(_c.segments[i].y_to | 0);
+            }
+
+            _c.gameHub.server.pushSegmentArrayNoJson(a);
+
+            //_c.gameHub.server.pushSegmentArray(_c.segments);  --NOPE! Silently fails in some cases
+
             _c.segments = [];
         }
     }
