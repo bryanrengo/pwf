@@ -174,20 +174,6 @@ $(function () {
         }
     }
 
-    //var c = $("#canvas")[0];
-    //var ctx = c.getContext("2d");
-    //var background = new Image();
-    //background.src = "/content/images/paper-background.jpg";
-
-    
-   // background.onload = function(){
-   //     ctx.drawImage(background,0,0);   
-    //}​
-    var c = $("#canvas");
-    c.attr("width", '100%');
-    c.attr("height", '100%');
-
-
     //initialize canvas size
     setCanvasSize();
 
