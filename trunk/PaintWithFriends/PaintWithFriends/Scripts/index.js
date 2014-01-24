@@ -109,4 +109,63 @@ $(function () {
         }
     }
 
+    //var c = $("#canvas")[0];
+    //var ctx = c.getContext("2d");
+    //var background = new Image();
+    //background.src = "/content/images/paper-background.jpg";
+
+    
+   // background.onload = function(){
+   //     ctx.drawImage(background,0,0);   
+    //}​
+    var c = $("#canvas");
+    c.attr("width", '100%');
+    c.attr("height", '100%');
+
+
+    //initialize canvas size
+    setCanvasSize();
+
+
+    //start timer
+    _startCountdown();
+
+    $(window).resize(function () {
+        setCanvasSize();
+    });
+
+    function setCanvasSize() {
+        var width, height, windowWidth;
+        windowWidth = $(window).width();
+        width = (windowWidth * .8) + 'px';
+        height = (windowWidth * .52) + 'px';
+        c.attr("width", width);
+        c.attr("height", height);
+    }
+
+    function _startCountdown() {
+        var progressBar = $(".meter");
+        setInterval(function () {
+            progressBar.width(progressBar.width() - 1);
+        },100);
+    };
+
+    //event handers
+    $("#joinButton").click(function () {
+        $(".join-container").hide();
+        $(".playerName").show();
+    });
+
+    //knockout code
+    var ViewModel = function () {
+        this.playerName = ko.observable();
+        this.guess = ko.observable();
+    };
+
+    ko.applyBindings(new ViewModel());
+
+
+
+
 });
+
