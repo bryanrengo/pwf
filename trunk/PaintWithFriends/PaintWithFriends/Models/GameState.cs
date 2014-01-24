@@ -9,10 +9,9 @@ using System.Web;
 
 namespace PaintWithFriends.Models
 {
-    public class GameState 
+    public class GameState : IGameState
     {
         private readonly static Lazy<GameState> _instance = new Lazy<GameState>(() => new GameState(GlobalHost.ConnectionManager.GetHubContext<GameHub>()));
-        private readonly ConcurrentDictionary<string, Player> _players = new ConcurrentDictionary<string, Player>(StringComparer.OrdinalIgnoreCase);
         private readonly ConcurrentDictionary<string, Game> _games = new ConcurrentDictionary<string, Game>(StringComparer.OrdinalIgnoreCase);
 
         public IHubConnectionContext Clients { get; set; }
@@ -31,23 +30,84 @@ namespace PaintWithFriends.Models
 
         public Player GetPlayer(string connectionId, string playerName)
         {
-            Player player = _players.GetOrAdd(playerName, new Player(connectionId, playerName));
+            Player player = _games.Values.Select(p => p.Players.Values.FirstOrDefault(v => v.ConnectionId == connectionId)).FirstOrDefault();
 
-            // wire up the new game or join game
-            
-            return player;
+            if (player == null)
+            {
+                return new Player(connectionId, playerName);
+            }
+            else
+            {
+                return player;
+            }          
         }
 
-        public Player GetPlayer(string connectionId, int id)
+        public Player GetPlayer(string connectionId)
         {
-            return null;
+            return  _games.Values.Select(p => p.Players.Values.FirstOrDefault(v => v.ConnectionId == connectionId)).FirstOrDefault();
         }
 
         public bool IsMatch(string connectionId, string match)
         {
             // find the group to find the game
-            
+
             return false;
+        }
+
+        /// <summary>
+        /// Gets the game.
+        /// </summary>
+        /// <returns>if no games are started, create a new one</returns>
+        public Game GetGame(Player player)
+        {
+            Game game = _games.Values.FirstOrDefault(p => !p.IsRunning);
+
+            if (game == null)
+            {
+                string group = Guid.NewGuid().ToString("d");
+
+                game = new Game(group);
+
+                game.Drawer = player;
+
+                game.Players.TryAdd(player.ConnectionId, player);
+
+                _games[group] = game;
+            }
+            else
+            {
+                game.Players.TryAdd(player.ConnectionId, player);
+            }
+
+            player.Game = game;
+
+            Groups.Add(player.ConnectionId, game.GroupId);
+
+            return game;
+        }
+
+        public Game GetGame(string connectionId)
+        {
+            Player currentPlayer = this.GetPlayer(connectionId);
+
+            return currentPlayer.Game;
+        }
+
+        public void RemovePlayer(string connectionId)
+        {
+            Player playerToRemove = this.GetPlayer(connectionId);
+
+            if (playerToRemove != null)
+            {
+                Game playerGame = playerToRemove.Game;
+
+                Player removedPlayer;
+
+                if (playerGame != null)
+                {
+                    playerGame.Players.TryRemove(playerToRemove.ConnectionId, out removedPlayer);
+                }
+            }
         }
     }
 }
