@@ -174,6 +174,9 @@ $(function () {
         }
     }
 
+    var c = $("#canvas");
+    
+
     //initialize canvas size
     setCanvasSize();
 
