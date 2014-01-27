@@ -108,9 +108,19 @@ namespace PaintWithFriends
 
             if (game.Guess(guess))
             {
+                // guess was correct, game is over so stop the game and send back winning player name to clients.
                 Player winner = GameState.Instance.GetPlayer(connectionId);
 
                 Clients.Group(game.GroupId).endGame(winner.Name);
+            }
+            else
+            {
+                // guess was incorrect. 
+                // broadcast to other players what the incorrect guess was and which player submitted the guess
+                Player player = GameState.Instance.GetPlayer(Context.ConnectionId, "nomatter");
+                if (player == null)
+                    throw new Exception("player not found");
+                Clients.AllExcept(Context.ConnectionId).incorrectGuess(new {playerName = player.Name, guess = guess});
             }
 
             return true;

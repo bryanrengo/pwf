@@ -14,7 +14,7 @@
 
 <div class="container">
 
-    <div class="row" >
+    <div class="row">
         <div class="border-image">
             <img src="~/content/images/frame-bg-1200.jpg"  />
         </div>
@@ -24,15 +24,18 @@
                 <canvas id="canvas"  height="400" ></canvas>
             </div>
         </div>
-       
+
     </div>
 
-    <div class=" container-bottom">
+    <div class="row container-bottom">
 
         <div class="join-container">
             <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value:playerName" class="small-4 columns" />
             <input type="button" value="clear" id="clearButton" class="small-4 columns  secondary button" />
             <input type="button" value="join" id="joinButton" class="small button small-4 columns" />
+            <input type="button" value="clear" id="clearButton" class="small  secondary button" />
+            <input type="button" value="join" id="joinButton" class="small button" />
+            <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value:playerName" />
         </div>
 
         <p class="playerName">Welcome <span data-bind="text:playerName"></span></p>
@@ -40,21 +43,18 @@
         <div class="progress small-12 radius round" style="display:none;">
             <span class="meter" style="width: 100%"></span>
         </div>
-        
-        <div style="display:none;">
-            <h2><span data-bind="text: guess"> </span></h2>
-            <p>Guess: <input data-bind="value: guess" /></p>
-        </div>
-      </div>
 
-    <div>
-      
+        <h2><span data-bind="text: guess"></span></h2>
+        <p>Guess:<input data-bind="value: guess" /></p>
+        <input type="button" value="start" id="startButton" disabled="disabled" />
+        <input type="text" id="guessText" />
+        <input type="button" value="guess" id="guessButton" />
     </div>
 
 </div>
 
 
-
+@*
 <input type="button" value="clear" id="clearButton" />
 
 <input type="text" id="playerText" />
@@ -64,3 +64,4 @@
 <input type="text" id="guessText" />
 <input type="button" value="guess" id="guessButton" />
 
+<p id="userText"></p>*@

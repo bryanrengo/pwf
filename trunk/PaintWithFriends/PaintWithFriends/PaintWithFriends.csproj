@@ -227,6 +227,7 @@
     <Content Include="Content\styles\Site.css" />
     <None Include="Properties\PublishProfiles\purplemonkeydishwasher.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="loaderio-7367fc1772b743cc4e84a690b03ca771.html" />
     <Content Include="Scripts\foundation\foundation.abide.js" />
     <Content Include="Scripts\foundation\foundation.accordion.js" />
     <Content Include="Scripts\foundation\foundation.alert.js" />
@@ -245,6 +246,12 @@
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.min.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.min.map" />
+    <Content Include="Scripts\jquery.hammer.js" />
+    <Content Include="Scripts\jquery.hammer.min.js" />
+    <Content Include="Scripts\jquery.hammer.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
