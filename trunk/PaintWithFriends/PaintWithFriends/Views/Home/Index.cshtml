@@ -14,7 +14,7 @@
 
 <div class="container">
 
-    <div class="row">
+    <div class="row" >
         <div class="border-image">
             <img src="~/content/images/frame-bg-1200.jpg"  />
         </div>
@@ -27,30 +27,34 @@
        
     </div>
 
-    <div class="row container-bottom">
-        
+    <div class=" container-bottom">
+
         <div class="join-container">
-            <input type="button" value="clear" id="clearButton" class="small  secondary button" />
-            <input type="button" value="join" id="joinButton" class="small button" />
-            <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value:playerName" />
+            <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value:playerName" class="small-4 columns" />
+            <input type="button" value="clear" id="clearButton" class="small-4 columns  secondary button" />
+            <input type="button" value="join" id="joinButton" class="small button small-4 columns" />
         </div>
 
         <p class="playerName">Welcome <span data-bind="text:playerName"></span></p>
         
-        <div class="progress small-8 large-8  radius round">
+        <div class="progress small-12 radius round" style="display:none;">
             <span class="meter" style="width: 100%"></span>
         </div>
         
-        <h2><span data-bind="text: guess"> </span></h2>
-        <p>Guess: <input data-bind="value: guess" /></p>
-   
+        <div style="display:none;">
+            <h2><span data-bind="text: guess"> </span></h2>
+            <p>Guess: <input data-bind="value: guess" /></p>
+        </div>
       </div>
+
+    <div>
+      
+    </div>
 
 </div>
 
 
 
-<h3>Appharbor was here</h3>
 <input type="button" value="clear" id="clearButton" />
 
 <input type="text" id="playerText" />

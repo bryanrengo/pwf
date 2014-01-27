@@ -77,10 +77,10 @@ textarea {
    
 }
 
-#clearButton, #joinButton
+/*#clearButton, #joinButton
 {
     float: right;
-}
+}*/
 
 #clearButton
 {
@@ -104,15 +104,15 @@ textarea {
 {
 }
 
-#playerText
+/*#playerText
 {
     width:200px;
     float:right;
-}
+}*/
 
 .playerName
 {
     display:none;
-    margin-right:20px;
-    float:right;
+    /*margin-right:20px;
+    float:right;*/
 }
