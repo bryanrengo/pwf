@@ -47,17 +47,10 @@ namespace PaintWithFriends.Models
             return  _games.Values.Select(p => p.Players.Values.FirstOrDefault(v => v.ConnectionId == connectionId)).FirstOrDefault();
         }
 
-        public bool IsMatch(string connectionId, string match)
-        {
-            // find the group to find the game
-
-            return false;
-        }
-
         /// <summary>
         /// Gets the game.
         /// </summary>
-        /// <returns>if no games are started, create a new one</returns>
+        /// <returns>if no games are started or queing, create a new one</returns>
         public Game GetGame(Player player)
         {
             Game game = _games.Values.FirstOrDefault(p => !p.IsRunning);
@@ -90,7 +83,14 @@ namespace PaintWithFriends.Models
         {
             Player currentPlayer = this.GetPlayer(connectionId);
 
-            return currentPlayer.Game;
+            if (currentPlayer != null)
+            {
+                return currentPlayer.Game;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void RemovePlayer(string connectionId)

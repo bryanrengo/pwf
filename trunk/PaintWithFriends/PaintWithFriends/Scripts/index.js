@@ -39,7 +39,7 @@ $(function () {
     $('#guessButton').click(function () {
         var guess = $('#guessText').val();
         var correctGuess = _c.gameHub.server.guess(guess);
-        
+
         if (!correctGuess) {
             console.log('sorry charlie! try again');
         }
@@ -86,13 +86,10 @@ $(function () {
         console.log(s);
     }
 
-
     // fn called when signalr hub is notifying player of an incorrect guess by another player.
-    _c.gameHub.client.incorrectGuess = function(msg) {
+    _c.gameHub.client.incorrectGuess = function (msg) {
         console.log('Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!');
     };
-    
-
 
     $("#clearButton").click(function () {
         clearCanvas();
@@ -100,15 +97,29 @@ $(function () {
     });
 
     _c.gameHub.client.enableDrawing = function (interval) {
-        _c.canvas.mouseup(function (e) {
-            mouseup_drawaction(e);
+        _c.canvas.hammer().on('dragstart', function (e) {
+            console.log('drag start at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            endDrawAction(e);
         });
-        _c.canvas.mousedown(function (e) {
-            mousedown_drawaction(e, this);
+        _c.canvas.hammer().on('drag', function (e) {
+            console.log('dragging at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            drawAction(e);
         });
-        _c.canvas.mousemove(function (e) {
-            mousemove_drawaction(e, this);
+        _c.canvas.hammer().on('dragend', function (e) {
+            console.log('drag end at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            startDrawAction(e);
         });
+        /// removed old code and using new code that utilizes crossbrowser touch library Hammer
+        //_c.canvas.mouseup(function (e) {
+        //    mouseup_drawaction(e);
+        //});
+        //_c.canvas.mousedown(function (e) {
+        //    mousedown_drawaction(e, this);
+        //});
+        //_c.canvas.mousemove(function (e) {
+        //    mousemove_drawaction(e, this);
+        //});
+
         $("#clearButton").removeAttr('disabled');
         _c.canvas.css('cursor', 'crosshair');
     }
@@ -123,6 +134,34 @@ $(function () {
 
     function clearCanvas() {
         _c.canvas.clearRect(0, 0, _c.canvas.width, _c.canvas.height);
+    }
+
+    function drawAction(e) {
+        if (_c.mouseclicked) {
+            var rx = e.gesture.srcEvent.offsetX;
+            var ry = e.gesture.srcEvent.offsetY;
+
+            _c.canvasContext.lineWidth = "1.0";
+            _c.canvasContext.beginPath();
+            _c.canvasContext.moveTo(_c.lastPoint.x, _c.lastPoint.y);
+            _c.canvasContext.lineTo(rx, ry);
+            _c.canvasContext.stroke();
+
+            addSegment(_c.lastPoint.x, _c.lastPoint.y, rx, ry);
+
+            _c.lastPoint.x = rx;
+            _c.lastPoint.y = ry;
+        }
+    }
+
+    function startDrawAction(e) {
+        _c.mouseclicked = false;
+    }
+
+    function endDrawAction(e) {
+        _c.mouseclicked = true;
+        _c.lastPoint.x = e.gesture.srcEvent.offsetX;
+        _c.lastPoint.y = e.gesture.srcEvent.offsetY;
     }
 
     function mouseup_drawaction(e) {
@@ -187,7 +226,7 @@ $(function () {
     }
 
     var c = $("#canvas");
-    
+
 
     //initialize canvas size
     setCanvasSize();
@@ -213,7 +252,7 @@ $(function () {
         var progressBar = $(".meter");
         setInterval(function () {
             progressBar.width(progressBar.width() - 1);
-        },100);
+        }, 100);
     };
 
     //event handers

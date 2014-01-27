@@ -12,6 +12,5 @@ namespace PaintWithFriends.Models
         Player GetPlayer(string connectionId);
         void RemovePlayer(string connectionId);
         Game GetGame(Player player);
-        bool IsMatch(string connectionId, string match);
     }
 }

@@ -246,6 +246,12 @@
     <Content Include="Scripts\index.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.min.js" />
+    <Content Include="Scripts\jquery.hammer-standalone.min.map" />
+    <Content Include="Scripts\jquery.hammer.js" />
+    <Content Include="Scripts\jquery.hammer.min.js" />
+    <Content Include="Scripts\jquery.hammer.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
