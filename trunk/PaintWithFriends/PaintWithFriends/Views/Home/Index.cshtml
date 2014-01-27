@@ -4,35 +4,39 @@
 
 @section head
 {
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
     <script src="~/Scripts/jquery.signalR-2.0.1.js" type="text/javascript"></script>
     <script src="~/Scripts/knockout-3.0.0.js" type="text/javascript"></script>
     <script src="~/signalr/hubs"></script>
     @*<script src="~/scripts/foundation.min.js"></script>*@
     <script src="~/Scripts/index.js" type="text/javascript"></script>
     <script src="~/Scripts/jquery.hammer.js" type="text/javascript"></script>
+    
 }
 
 
 <div class="container">
 
-    <div class="row">
-        <div class="canvas-container" style="position:relative;">
-            <div class="border-image">
-                <img src="~/content/images/frame-bg-1200.jpg" />
-            </div>
-            <div id="canvasDiv">
-                <canvas id="canvas"></canvas>
+    <div class="row top-row">
+        <div class="small-8 columns">
+            <div class="canvas-container">
+                <div class="border-image">
+                    <img src="~/content/images/frame-bg-1200.jpg" />
+                </div>
+                <div id="canvasDiv">
+                    <canvas id="canvas"></canvas>
+                </div>
             </div>
         </div>
-
+        <div class="small-4 columns">
+            <h4>Players</h4>
+            <ul id="playerList"></ul>
+        </div>
     </div>
 
     <div class="row container-bottom">
 
         <div class="join-container">
-            <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value:playerName" class="small-4 columns" />
-            <input type="button" value="clear" id="clearButton" class="small-4 columns  secondary button" />
-            <input type="button" value="join" id="joinButton" class="small button small-4 columns" />
             <input type="button" value="clear" id="clearButton" class="small  secondary button" />
             <input type="button" value="join" id="joinButton" class="small button" />
             <input type="text" id="playerText" placeholder="Enter your name..." data-bind="value: playerName" />

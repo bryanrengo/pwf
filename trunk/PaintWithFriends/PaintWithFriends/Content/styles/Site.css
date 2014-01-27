@@ -90,6 +90,7 @@ textarea {
 
 .canvas-container
 {
+    position:relative;
     margin:0 auto;
     width:600px;
     height:400px;
@@ -112,6 +113,11 @@ textarea {
 {
     height:400px;
     width:600px;
+}
+
+.top-row {
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .progress
