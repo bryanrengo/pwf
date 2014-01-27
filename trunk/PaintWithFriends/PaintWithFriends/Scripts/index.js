@@ -98,17 +98,18 @@ $(function () {
 
     _c.gameHub.client.enableDrawing = function (interval) {
         _c.canvas.hammer().on('dragstart', function (e) {
-            console.log('drag start at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            // console.log('drag start at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
             endDrawAction(e);
         });
         _c.canvas.hammer().on('drag', function (e) {
-            console.log('dragging at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            // console.log('dragging at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
             drawAction(e);
         });
         _c.canvas.hammer().on('dragend', function (e) {
-            console.log('drag end at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
+            // console.log('drag end at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
             startDrawAction(e);
         });
+
         /// removed old code and using new code that utilizes crossbrowser touch library Hammer
         //_c.canvas.mouseup(function (e) {
         //    mouseup_drawaction(e);
@@ -137,7 +138,8 @@ $(function () {
     }
 
     function drawAction(e) {
-        if (_c.mouseclicked) {
+        // make sure that the mouse is clicked and the target of the draw event is the canvas
+        if (_c.mouseclicked && e.gesture.target.id === "canvas") {
             var rx = e.gesture.srcEvent.offsetX;
             var ry = e.gesture.srcEvent.offsetY;
 
@@ -241,9 +243,10 @@ $(function () {
 
     function setCanvasSize() {
         var width, height, windowWidth;
-        windowWidth = $(window).width();
-        width = (windowWidth * .8) + 'px';
-        height = (windowWidth * .52) + 'px';
+        //windowWidth = $(window).width();
+        width = c.parent().width(); // (windowWidth * .8) + 'px';
+        height = c.parent().height(); //(windowWidth * .52) + 'px';
+
         c.attr("width", width);
         c.attr("height", height);
     }

@@ -149,3 +149,9 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+
+#git base, local, remote files
+*.BASE
+*.LOCAL
+*.REMOTE
+
