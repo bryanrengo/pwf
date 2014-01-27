@@ -151,7 +151,7 @@ $RECYCLE.BIN/
 .DS_Store
 
 #git base, local, remote files
-*.BASE
-*.LOCAL
-*.REMOTE
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
 
