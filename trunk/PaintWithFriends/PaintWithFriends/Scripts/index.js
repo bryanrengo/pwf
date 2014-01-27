@@ -38,7 +38,11 @@ $(function () {
 
     $('#guessButton').click(function () {
         var guess = $('#guessText').val();
-        _c.gameHub.server.guess(guess);
+        var correctGuess = _c.gameHub.server.guess(guess);
+        
+        if (!correctGuess) {
+            console.log('sorry charlie! try again');
+        }
     });
 
     _c.gameHub.client.enableStart = function () {
@@ -81,6 +85,14 @@ $(function () {
     _c.gameHub.client.messageFromServer = function (s) {
         console.log(s);
     }
+
+
+    // fn called when signalr hub is notifying player of an incorrect guess by another player.
+    _c.gameHub.client.incorrectGuess = function(msg) {
+        console.log('Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!');
+    };
+    
+
 
     $("#clearButton").click(function () {
         clearCanvas();
