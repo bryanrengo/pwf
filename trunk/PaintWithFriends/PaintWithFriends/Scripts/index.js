@@ -11,6 +11,7 @@ $(function () {
     _c.gameHub = $.connection.gameHub;
     _c.segments = [];
     _c.playerId = "";
+    _c.players = [];
 
     setInterval(function () { doSegmentPush() }, 50);
 
@@ -45,6 +46,24 @@ $(function () {
         }
     });
 
+    _c.gameHub.client.playersInGame = function (players) {
+        for (var i in players) {
+            var player = players[i];
+            _c.players.push(player);
+            $('#playerList').append('<li id="id_' + player.ConnectionId + '">' + player.Name + '</li>');
+        }
+    }
+
+    _c.gameHub.client.newPlayerJoined = function (player) {
+        _c.players.push(player);
+        $('#playerList').append('<li id="id_'+ player.ConnectionId + '">' + player.Name + '</li>');
+    };
+
+    _c.gameHub.client.playerLeft = function (player) {
+        _c.players.pop(player);
+        $('li#id_' + player.ConnectionId).remove();
+    }
+
     _c.gameHub.client.enableStart = function () {
         // user who can start the game gets this message
         $('#startButton').removeAttr('disabled');
@@ -52,11 +71,17 @@ $(function () {
         console.log('you can start the game');
     };
 
+    _c.gameHub.client.disableStart = function () {
+        $('#startButton').attr('disabled', 'disabled');
+    };
+
     _c.gameHub.client.endGame = function (winner) {
         alert(winner + " has won!");
     };
 
     _c.gameHub.client.startGame = function (interval) {
+        _startCountdown();
+
         console.log('set the timer interval for guessing and drawing');
     };
 
@@ -138,8 +163,8 @@ $(function () {
     }
 
     function drawAction(e) {
-        // make sure that the mouse is clicked and the target of the draw event is the canvas
-        if (_c.mouseclicked && e.gesture.target.id === "canvas") {
+        // make sure that the mouse is clicked and the target of the draw event is inside the canvas element
+        if (_c.mouseclicked && e.gesture.target.id != "") {
             var rx = e.gesture.srcEvent.offsetX;
             var ry = e.gesture.srcEvent.offsetY;
 
@@ -166,35 +191,36 @@ $(function () {
         _c.lastPoint.y = e.gesture.srcEvent.offsetY;
     }
 
-    function mouseup_drawaction(e) {
-        if (e.which === 1) _c.mouseclicked = false;
-    }
+    /// removed old code and using new code that utilizes crossbrowser touch library Hammer
+    //function mouseup_drawaction(e) {
+    //    if (e.which === 1) _c.mouseclicked = false;
+    //}
 
-    function mousedown_drawaction(e, o) {
-        if (e.which === 1) _c.mouseclicked = true;
-        var parentOffset = $(o).parent().offset();
-        _c.lastPoint.x = (e.pageX - parentOffset.left);
-        _c.lastPoint.y = (e.pageY - parentOffset.top);
-    }
+    //function mousedown_drawaction(e, o) {
+    //    if (e.which === 1) _c.mouseclicked = true;
+    //    var parentOffset = $(o).parent().offset();
+    //    _c.lastPoint.x = (e.pageX - parentOffset.left);
+    //    _c.lastPoint.y = (e.pageY - parentOffset.top);
+    //}
 
-    function mousemove_drawaction(e, o) {
-        if (_c.mouseclicked) {
-            var parentOffset = $(o).parent().offset();
-            var rx = (e.pageX - parentOffset.left);
-            var ry = (e.pageY - parentOffset.top);
+    //function mousemove_drawaction(e, o) {
+    //    if (_c.mouseclicked) {
+    //        var parentOffset = $(o).parent().offset();
+    //        var rx = (e.pageX - parentOffset.left);
+    //        var ry = (e.pageY - parentOffset.top);
 
-            _c.canvasContext.lineWidth = "1.0";
-            _c.canvasContext.beginPath();
-            _c.canvasContext.moveTo(_c.lastPoint.x, _c.lastPoint.y);
-            _c.canvasContext.lineTo(rx, ry);
-            _c.canvasContext.stroke();
+    //        _c.canvasContext.lineWidth = "1.0";
+    //        _c.canvasContext.beginPath();
+    //        _c.canvasContext.moveTo(_c.lastPoint.x, _c.lastPoint.y);
+    //        _c.canvasContext.lineTo(rx, ry);
+    //        _c.canvasContext.stroke();
 
-            addSegment(_c.lastPoint.x, _c.lastPoint.y, rx, ry);
+    //        addSegment(_c.lastPoint.x, _c.lastPoint.y, rx, ry);
 
-            _c.lastPoint.x = rx;
-            _c.lastPoint.y = ry;
-        }
-    }
+    //        _c.lastPoint.x = rx;
+    //        _c.lastPoint.y = ry;
+    //    }
+    //}
 
     function addSegment(x_from, y_from, x_to, y_to) {
         var seg = {};
@@ -232,10 +258,6 @@ $(function () {
 
     //initialize canvas size
     setCanvasSize();
-
-
-    //start timer
-    _startCountdown();
 
     $(window).resize(function () {
         setCanvasSize();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,6 +18,8 @@ namespace PaintWithFriends.Models
 
         public string ConnectionId { get; set; }
         public string Name { get; set; }
+
+        [JsonIgnore]
         public Game Game { get; set; }
         
         /// <summary>
