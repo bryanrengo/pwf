@@ -15,62 +15,60 @@
 
 }
 
-    <div class="row top-row">
+<div class="row top-row">
     <div class="medium-8 columns">
-            <div class="canvas-container">
-                <div class="border-image">
-                    <img src="~/content/images/frame-bg-1200.jpg" />
-                </div>
-                <div id="canvasDiv">
-                    <canvas id="canvas"></canvas>
-                </div>
+        <div class="canvas-container">
+            <div class="border-image">
+                <img src="~/content/images/frame-bg-1200.jpg" />
+            </div>
+            <div id="canvasDiv">
+                <canvas id="canvas"></canvas>
             </div>
         </div>
-    <div class="medium-4 columns panel">
+    </div>
+    <div class="medium-4 columns">
+        <div class="panel medium-12 columns">
             <h4>Players</h4>
-            <ul data-bind="foreach: players">
-                <li>
-                    <span data-bind="text: Name"></span>
-                    <img src="" alt="isDrawer" data-bind="visible: IsDrawer" />
-                </li>
-            </ul>
+            <ul id="playerList"></ul>
+        </div>
+
+        <div class="join-container medium-12 columns">
+            <div class="small-8 columns">
+                <input type="text" id="playerText" placeholder="Name" data-bind="value: playerName" />
+            </div>
+            <div class="small-4 columns">
+                <input type="button" value="join" id="joinButton" class="small button" />
+            </div>
+            <input type="button" value="clear" id="clearButton" class="small  secondary button" />
+
+            <p class="playerName">Welcome <span data-bind="text: playerName"></span></p>
+
         </div>
     </div>
+</div>
 
-    <div class="row container-bottom">
+<div class="row container-bottom">
 
     <div class="progress small-8  radius round">
-            <span class="meter" style="width: 100%"></span>
-        </div>
-        <div class="join-container">
-            <form data-bind="submit: joinGame">
-            <div class="small-4 columns">
-                    <input type="text" data-bind="value: playerName" placeholder="Name" />
-            </div>
-            <div class="small-8 columns">
-                    <input type="submit" data-bind="enable: isConnected" value="join" class="small button" />
-                    <input type="button" data-bind="click: clearCanvas, enable: isPlaying" value="clear" class="small secondary button" />
-            </div>
-            </form>
-        </div>
-
-
-
-        <h2><span data-bind="text: guess"></span></h2>
-       
-        <form data-bind="submit: guessValue">
-        <div class="small-4 columns">
-                <input type="text" data-bind="value: guess" placeholder="It's a..." />
-        </div>
-
-        <div class="small-8 columns">
-                <input type="submit" data-bind="enable: isPlaying" value="guess" class="small button" />
-        </div>
-        </form>
-
-        <input type="button" data-bind="click: startGame, enable: isReady" value="start" class="small button" />
-       
+        <span class="meter" style="width: 100%"></span>
     </div>
+
+    
+
+
+
+    <h2><span data-bind="text: guess"></span></h2>
+
+    <div class="small-4 columns">
+        <input type="text" id="guessText" placeholder="It's a..." />
+    </div>
+    <div class="small-8 columns">
+        <input type="button" value="guess" id="guessButton" class="small button" />
+    </div>
+
+    <input type="button" value="start" id="startButton" disabled="disabled" />
+
+</div>
 
 
 
