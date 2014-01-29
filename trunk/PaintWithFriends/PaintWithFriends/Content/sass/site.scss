@@ -1,0 +1,39 @@
+@import "base";
+
+
+#canvas
+{
+    cursor:crosshair;
+}
+
+
+#clearButton
+{
+    display:none;
+}
+
+.canvas-container
+{
+    -ms-touch-action:none;
+}
+
+#canvasDiv {
+    position:absolute;
+    left:9%;
+    top:12.5%;
+    height:75%;
+    width:82%;
+    
+}
+
+
+.top-row {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+
+.playerName
+{
+    display:none;
+}

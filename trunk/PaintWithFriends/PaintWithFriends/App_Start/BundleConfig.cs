@@ -25,7 +25,6 @@ namespace PaintWithFriends
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/styles/normalize.css",
-                        "~/Content/styles/foundation.css",
                         "~/Content/styles/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
