@@ -12,7 +12,7 @@ namespace PaintWithFriends.Models
         {
             this.ConnectionId = connectionId;
             this.Name = name;
-            this.IsDrawing = false;
+            this.IsDrawer = false;
             this.IsPlaying = false;
         }
 
@@ -28,8 +28,8 @@ namespace PaintWithFriends.Models
         public bool IsPlaying { get; set; }
 
         /// <summary>
-        /// IsDrawing; this Player is drawing
+        /// IsDrawer; this Player is drawer
         /// </summary>
-        public bool IsDrawing { get; set; }
+        public bool IsDrawer { get; set; }
     }
 }

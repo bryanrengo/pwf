@@ -61,8 +61,10 @@ namespace PaintWithFriends.Models
 
                 game = new Game(group);
 
-                game.Drawer = player;
+                player.IsDrawer = true;
 
+                game.Drawer = player;
+                
                 game.Players.TryAdd(player.ConnectionId, player);
 
                 _games[group] = game;
@@ -106,7 +108,20 @@ namespace PaintWithFriends.Models
                 if (playerGame != null)
                 {
                     playerGame.Players.TryRemove(playerToRemove.ConnectionId, out removedPlayer);
+
+                    Groups.Remove(removedPlayer.ConnectionId, playerGame.GroupId);
                 }
+            }
+        }
+
+        public void RemoveGame(Game game)
+        {            
+            if (game != null)
+            {
+                Game gameToRemove;
+
+                _games.TryRemove(game.GroupId, out gameToRemove);
+
             }
         }
     }

@@ -48,6 +48,11 @@ namespace PaintWithFriends
 
         public bool Join(string playerName)
         {
+            if (string.IsNullOrEmpty(playerName))
+            {
+                return false;
+            }
+
             // find or create a new player, automatically adding them to the game if there is one currently queued
             Player player = GameState.Instance.GetPlayer(Context.ConnectionId, playerName);
 
@@ -63,7 +68,7 @@ namespace PaintWithFriends
             Clients.Client(player.ConnectionId).playersInGame(game.Players);
 
             // announce that a new player has joined the game
-            Clients.Group(game.GroupId, player.ConnectionId).newPlayerJoined(player);
+            Clients.Group(game.GroupId, player.ConnectionId).playerJoined(player);
 
             if (game.Players.Count >= 3)
             {
@@ -136,11 +141,18 @@ namespace PaintWithFriends
 
         public override Task OnDisconnected()
         {
+            string connectionId = Context.ConnectionId;
+            
             // find the game that the player was playing in
-            Game game = GameState.Instance.GetGame(Context.ConnectionId);
+            Game game = GameState.Instance.GetGame(connectionId);
 
             // find the player
-            Player player = GameState.Instance.GetPlayer(Context.ConnectionId);
+            Player player = GameState.Instance.GetPlayer(connectionId);
+
+            if (player == null && game == null)
+            {
+                return base.OnDisconnected();
+            }
 
             if (player != null && game != null && game.Drawer == player && game.Players.Count > 1)
             {
@@ -160,6 +172,10 @@ namespace PaintWithFriends
             {
                 Clients.Client(game.Drawer.ConnectionId).enableStart();
             }
+            else if (game.Players.Count == 0)
+            {
+                GameState.Instance.RemoveGame(game);
+            } 
             else
             {
                 Clients.Group(game.GroupId).disableStart();

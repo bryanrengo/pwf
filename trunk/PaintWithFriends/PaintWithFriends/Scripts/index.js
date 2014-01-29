@@ -1,163 +1,165 @@
 ﻿_c = typeof (_c) == "undefined" ? {} : _c;
 
 $(function () {
-    $('#joinButton').attr('disabled', 'disabled');
-    $('#startButton').attr('disabled', 'disabled');
 
+    // setup the canvas global stuff
     _c.canvas = $("#canvas");
     _c.canvasElement = _c.canvas[0];//same as document.getElementById
     _c.canvasContext = _c.canvasElement.getContext("2d");
     _c.lastPoint = {};
-    _c.gameHub = $.connection.gameHub;
     _c.segments = [];
-    _c.playerId = "";
-    _c.players = [];
 
     setInterval(function () { doSegmentPush() }, 50);
 
-    $.connection.hub.start().done(function () {
-        $('#joinButton').removeAttr('disabled');
-    });
+    // create the knockout viewmodel
+    function gameViewModel() {
+        var self = this;
 
-    $('#joinButton').click(function () {
-        var playerName = $('#playerText').val();
+        // viewmodel properties    
+        self.playerName = ko.observable("");
+        self.playerId = ko.observable("");
+        self.guess = ko.observable("");
+        self.isConnected = ko.observable(false);
+        self.isPlaying = ko.observable(false);
+        self.isReady = ko.observable(false);
+        self.players = ko.observableArray([]);
+        self.hub = $.connection.gameHub;
 
-        _c.player = playerName;
+        // connect to hub
+        $.connection.hub.start().done(function () {
+            self.isConnected(true);
+        });
 
-        _c.gameHub.server.join(playerName).done(function (isPlayer) {
-            if (isPlayer) {
-                _c.playerId = _c.gameHub.state.playerId;
-                $('#joinButton').attr('disabled', 'disabled');
-                $('#playerText').attr('disabled', 'disabled');
+        // viewmodel methods
+
+        // joinGame method
+        self.joinGame = function () {
+
+            // get the playerName from the viewModel
+            var player = self.playerName();
+
+            // submit join method to the hub
+            self.hub.server.join(player).done(function (isPlayer) {
+                // returns a boolean
+                if (isPlayer) {
+                    self.playerId(self.hub.state.playerId);
+                    self.isConnected(true);
+                    self.isReady(true);
+                }
+            });
+        };
+
+        // startGame method
+        self.startGame = function () {
+            // submit start method to the hub
+            self.hub.server.start();
+        };
+
+        // guessValue method
+        self.guessValue = function () {
+            var correctGuess = self.hub.server.guess(self.guess());
+
+            if (!correctGuess) {
+                console.log('sorry charlie! try again');
             }
-        })
-    });
+        };
 
-    $('#startButton').click(function () {
-        _c.gameHub.server.start();
-    });
+        // clearCanvas method
+        self.clearCanvas = function () {
+            // send the clear message to the server so all the clients are cleared
+            self.hub.server.clear();
+        };
 
-    $('#guessButton').click(function () {
-        var guess = $('#guessText').val();
-        var correctGuess = _c.gameHub.server.guess(guess);
+        // hub methods 
+        self.hub.client.playersInGame = function (players) {
+            for (var i in players) {
+                var player = players[i];
+                self.players.push(player);
+            }
+        };
 
-        if (!correctGuess) {
-            console.log('sorry charlie! try again');
+        self.hub.client.playerJoined = function (player) {
+            self.players.push(player);
+        };
+
+        self.hub.client.playerLeft = function (player) {
+            self.players.pop(player);
+        };
+
+        self.hub.client.disableStart = function () {
+            self.isReady(false);
+        };
+
+        self.hub.client.enableStart = function () {
+            self.isReady(true);
         }
-    });
 
-    _c.gameHub.client.playersInGame = function (players) {
-        for (var i in players) {
-            var player = players[i];
-            _c.players.push(player);
-            $('#playerList').append('<li id="id_' + player.ConnectionId + '">' + player.Name + '</li>');
+        self.hub.client.startGame = function (interval) {
+            _startCountdown();
+            self.isPlaying(true);
+            console.log('set the timer interval for guessing and drawing');
+        };
+
+        self.hub.client.endGame = function (winner) {
+            alert(winner + " has won!");
+        };
+
+        // fn called when signalr hub is notifying player of an incorrect guess by another player.
+        self.hub.client.incorrectGuess = function (msg) {
+            console.log('Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!');
+        };
+
+        self.hub.client.enableDrawing = function (interval) {
+            _c.canvas.hammer().on('dragstart', function (e) {
+                endDrawAction(e);
+            });
+
+            _c.canvas.hammer().on('drag', function (e) {
+                drawAction(e);
+            });
+
+            _c.canvas.hammer().on('dragend', function (e) {
+                startDrawAction(e);
+            });
+
+            _c.canvas.css('cursor', 'crosshair');
         }
-    }
 
-    _c.gameHub.client.newPlayerJoined = function (player) {
-        _c.players.push(player);
-        $('#playerList').append('<li id="id_'+ player.ConnectionId + '">' + player.Name + '</li>');
-    };
+        self.hub.client.disableDrawing = function () {
+            _c.canvas.unbind('mouseup');
+            _c.canvas.unbind('mousedown');
+            _c.canvas.unbind('mousemove');
+            $("#clearButton").attr('disabled', 'disabled');
+            _c.canvas.css('cursor', 'pointer');
+        }
 
-    _c.gameHub.client.playerLeft = function (player) {
-        _c.players.pop(player);
-        $('li#id_' + player.ConnectionId).remove();
-    }
-
-    _c.gameHub.client.enableStart = function () {
-        // user who can start the game gets this message
-        $('#startButton').removeAttr('disabled');
-
-        console.log('you can start the game');
-    };
-
-    _c.gameHub.client.disableStart = function () {
-        $('#startButton').attr('disabled', 'disabled');
-    };
-
-    _c.gameHub.client.endGame = function (winner) {
-        alert(winner + " has won!");
-    };
-
-    _c.gameHub.client.startGame = function (interval) {
-        _startCountdown();
-
-        console.log('set the timer interval for guessing and drawing');
-    };
-
-    _c.gameHub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
-        _c.canvasContext.lineWidth = "1.0";
-        _c.canvasContext.beginPath();
-        _c.canvasContext.moveTo(x_from, y_from);
-        _c.canvasContext.lineTo(x_to, y_to);
-        _c.canvasContext.stroke();
-    }
-
-    _c.gameHub.client.drawSegments = function (segments) {
-        for (var i = 0; i < segments.length; i++) {
+        self.hub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
             _c.canvasContext.lineWidth = "1.0";
             _c.canvasContext.beginPath();
-            _c.canvasContext.moveTo(segments[i].x_from, segments[i].y_from);
-            _c.canvasContext.lineTo(segments[i].x_to, segments[i].y_to);
+            _c.canvasContext.moveTo(x_from, y_from);
+            _c.canvasContext.lineTo(x_to, y_to);
             _c.canvasContext.stroke();
+        }
+
+        self.hub.client.drawSegments = function (segments) {
+            for (var i = 0; i < segments.length; i++) {
+                _c.canvasContext.lineWidth = "1.0";
+                _c.canvasContext.beginPath();
+                _c.canvasContext.moveTo(segments[i].x_from, segments[i].y_from);
+                _c.canvasContext.lineTo(segments[i].x_to, segments[i].y_to);
+                _c.canvasContext.stroke();
+            }
+        }
+
+        self.hub.client.clear = function () {
+            clearCanvas();
         }
     }
 
-    _c.gameHub.client.clear = function () {
-        clearCanvas();
-    }
+    var gameVM = new gameViewModel();
 
-    _c.gameHub.client.messageFromServer = function (s) {
-        console.log(s);
-    }
-
-    // fn called when signalr hub is notifying player of an incorrect guess by another player.
-    _c.gameHub.client.incorrectGuess = function (msg) {
-        console.log('Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!');
-    };
-
-    $("#clearButton").click(function () {
-        clearCanvas();
-        _c.gameHub.server.clear();
-    });
-
-    _c.gameHub.client.enableDrawing = function (interval) {
-        _c.canvas.hammer().on('dragstart', function (e) {
-            // console.log('drag start at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
-            endDrawAction(e);
-        });
-        _c.canvas.hammer().on('drag', function (e) {
-            // console.log('dragging at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
-            drawAction(e);
-        });
-        _c.canvas.hammer().on('dragend', function (e) {
-            // console.log('drag end at ' + e.gesture.srcEvent.offsetX + ', ' + e.gesture.srcEvent.offsetY);
-            startDrawAction(e);
-        });
-
-        /// removed old code and using new code that utilizes crossbrowser touch library Hammer
-        //_c.canvas.mouseup(function (e) {
-        //    mouseup_drawaction(e);
-        //});
-        //_c.canvas.mousedown(function (e) {
-        //    mousedown_drawaction(e, this);
-        //});
-        //_c.canvas.mousemove(function (e) {
-        //    mousemove_drawaction(e, this);
-        //});
-
-        $("#clearButton").removeAttr('disabled');
-        _c.canvas.css('cursor', 'crosshair');
-    }
-
-    _c.gameHub.client.disableDrawing = function () {
-        _c.canvas.unbind('mouseup');
-        _c.canvas.unbind('mousedown');
-        _c.canvas.unbind('mousemove');
-        $("#clearButton").attr('disabled', 'disabled');
-        _c.canvas.css('cursor', 'pointer');
-    }
-
+    ko.applyBindings(gameVM);
+    
     function clearCanvas() {
         _c.canvas.clearRect(0, 0, _c.canvas.width, _c.canvas.height);
     }
@@ -245,16 +247,13 @@ $(function () {
                 a.push(_c.segments[i].y_to | 0);
             }
 
-            _c.gameHub.server.pushSegmentArrayNoJson(a);
+            gameVM.hub.server.pushSegmentArrayNoJson(a);
 
             //_c.gameHub.server.pushSegmentArray(_c.segments);  --NOPE! Silently fails in some cases
 
             _c.segments = [];
         }
     }
-
-    var c = $("#canvas");
-
 
     //initialize canvas size
     setCanvasSize();
@@ -264,10 +263,10 @@ $(function () {
     });
 
     function setCanvasSize() {
-        var width, height, windowWidth;
-        //windowWidth = $(window).width();
-        width = c.parent().width(); // (windowWidth * .8) + 'px';
-        height = c.parent().height(); //(windowWidth * .52) + 'px';
+        var c = $("#canvas");
+        var width, height;
+        width = c.parent().width();
+        height = c.parent().height();
 
         c.attr("width", width);
         c.attr("height", height);
@@ -278,21 +277,6 @@ $(function () {
         setInterval(function () {
             progressBar.width(progressBar.width() - 1);
         }, 100);
-    };
-
-    //event handers
-    $("#joinButton").click(function () {
-        $(".join-container").hide();
-        $(".playerName").show();
-    });
-
-    //knockout code
-    var ViewModel = function () {
-        this.playerName = ko.observable();
-        this.guess = ko.observable();
-    };
-
-    ko.applyBindings(new ViewModel());
-
+    }
 });
 

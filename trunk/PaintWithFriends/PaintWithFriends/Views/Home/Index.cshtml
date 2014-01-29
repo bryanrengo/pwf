@@ -14,7 +14,6 @@
 
 }
 
-
 <div class="container">
 
     <div class="row top-row">
@@ -30,7 +29,12 @@
         </div>
         <div class="small-4 columns">
             <h4>Players</h4>
-            <ul id="playerList"></ul>
+            <ul data-bind="foreach: players">
+                <li>
+                    <span data-bind="text: Name"></span>
+                    <img src="" alt="isDrawer" data-bind="visible: IsDrawer" />
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -39,31 +43,34 @@
             <span class="meter" style="width: 100%"></span>
         </div>
         <div class="join-container">
-            <div class="small-4 columns">
+            <form data-bind="submit: joinGame">
+                <div class="small-4 columns">
+                    <input type="text" data-bind="value: playerName" placeholder="Name" />
+                </div>
 
-                <input type="text" id="playerText" placeholder="Name" data-bind="value: playerName" />
-            </div>
-
-            <div class="small-8 columns">
-                <input type="button" value="join" id="joinButton" class="small button" />
-                <input type="button" value="clear" id="clearButton" class="small  secondary button" />
-
-            </div>
+                <div class="small-8 columns">
+                    <input type="submit" data-bind="enable: isConnected" value="join" class="small button" />
+                    <input type="button" data-bind="click: clearCanvas, enable: isPlaying" value="clear" class="small secondary button" />
+                </div>
+            </form>
         </div>
 
         <p class="playerName">Welcome <span data-bind="text: playerName"></span></p>
 
         <h2><span data-bind="text: guess"></span></h2>
-       
-        <div class="small-4 columns">
-            <input type="text" id="guessText" placeholder="It's a..." />
-        </div>
-        <div class="small-8 columns">
-            <input type="button" value="guess" id="guessButton" class="small button" />
-        </div>
 
-         <input type="button" value="start" id="startButton" disabled="disabled" />
-       
+        <form data-bind="submit: guessValue">
+            <div class="small-4 columns">
+                <input type="text" data-bind="value: guess" placeholder="It's a..." />
+            </div>
+
+            <div class="small-8 columns">
+                <input type="submit" data-bind="enable: isPlaying" value="guess" class="small button" />
+            </div>
+        </form>
+
+        <input type="button" data-bind="click: startGame, enable: isReady" value="start" class="small button" />
+
     </div>
 
 </div>
