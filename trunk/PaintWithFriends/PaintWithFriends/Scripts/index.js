@@ -110,8 +110,8 @@ $(function () {
         };
 
         self.hub.client.enableDrawing = function (interval) {
-            _c.canvas.hammer().on('dragstart', function (e) {
-                endDrawAction(e);
+            _c.canvas.hammer().on('touch', function (e) {
+                startDrawAction(e);
             });
 
             _c.canvas.hammer().on('drag', function (e) {
@@ -119,7 +119,7 @@ $(function () {
             });
 
             _c.canvas.hammer().on('dragend', function (e) {
-                startDrawAction(e);
+                endDrawAction(e);
             });
 
             _c.canvas.css('cursor', 'crosshair');
@@ -183,11 +183,11 @@ $(function () {
         }
     }
 
-    function startDrawAction(e) {
+    function endDrawAction(e) {
         _c.mouseclicked = false;
     }
 
-    function endDrawAction(e) {
+    function startDrawAction(e) {
         _c.mouseclicked = true;
         _c.lastPoint.x = e.gesture.srcEvent.offsetX;
         _c.lastPoint.y = e.gesture.srcEvent.offsetY;
