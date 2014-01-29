@@ -62,26 +62,9 @@ textarea {
 
 #canvas
 {
-    /*border:solid 2px purple;*/
     cursor:crosshair;
 }
 
-#canvasDiv
-{
-    height:400px;
-    width:600px;  
-}
-
-.container-bottom
-{
-    margin:10px 10px 10px 10px;
-   
-}
-
-/*#clearButton, #joinButton
-{
-    float: right;
-}*/
 
 #clearButton
 {
@@ -90,10 +73,7 @@ textarea {
 
 .canvas-container
 {
-    position:relative;
-    margin:0 auto;
-    width:600px;
-    height:400px;
+
     -ms-touch-action:none;
 }
 
@@ -103,36 +83,17 @@ textarea {
     top:12.5%;
     height:75%;
     width:82%;
+    
 }
 
-.border-image {
-    position:absolute;
-}
-
-.border-image img
-{
-    height:400px;
-    width:600px;
-}
 
 .top-row {
     margin-top:10px;
     margin-bottom:10px;
 }
 
-.progress
-{
-}
-
-/*#playerText
-{
-    width:200px;
-    float:right;
-}*/
 
 .playerName
 {
     display:none;
-    /*margin-right:20px;
-    float:right;*/
 }
