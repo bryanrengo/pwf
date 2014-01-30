@@ -5,11 +5,18 @@ using System.Web;
 using Microsoft.AspNet.SignalR;
 using PaintWithFriends.Models;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace PaintWithFriends
 {
     public class GameHub : Hub
     {
+        public class ChatMessage
+        {
+            public string PlayerName { get; set; }
+            public string Message { get; set; }
+        }
+
         public class segment
         {
             public int x_from { get; set; }
@@ -123,7 +130,9 @@ namespace PaintWithFriends
                 Player winner = GameState.Instance.GetPlayer(connectionId);
 
                 // communicate that the current guess is the winner
-                Clients.Group(game.GroupId).endGame(winner.Name);
+                Clients.Group(game.GroupId).endGame(winner);
+
+                return true;
             }
             else
             {
@@ -133,16 +142,45 @@ namespace PaintWithFriends
                 if (player == null)
                     throw new Exception("player not found");
 
-                Clients.AllExcept(Context.ConnectionId).incorrectGuess(new {playerName = player.Name, guess = guess});
-            }
+                // Clients.AllExcept(Context.ConnectionId).incorrectGuess(new { playerName = player.Name, guess = guess });
 
-            return true;
+                return false;
+            }
+        }
+
+        public void SubmitChat(string chat)
+        {
+            HttpServerUtility Server = HttpContext.Current.Server;
+
+            string chatOutput = Server.HtmlEncode(Regex.Replace(chat, "<[^>]*(>|$)", string.Empty));
+
+            Player player = GameState.Instance.GetPlayer(Context.ConnectionId);
+
+            if (player != null && player.Game != null)
+            {
+                if (player.Game.IsRunning && (chatOutput.Contains("/g ") || chatOutput.Contains("/guess ")))
+                {
+                    // is a guess!  find the guess string
+                    string guess = chatOutput.Replace("/guess ", string.Empty);
+
+                    guess = guess.Replace("/g ", string.Empty);
+
+                    guess = guess.Trim();
+
+                    if (!Guess(guess))
+                    {
+                        chatOutput = string.Format("guessed '{0}' but was incorrect", guess);
+                    }
+                }
+
+                Clients.Group(player.Game.GroupId).sendChat(new ChatMessage() { Message = chatOutput, PlayerName = player.Name });
+            }
         }
 
         public override Task OnDisconnected()
         {
             string connectionId = Context.ConnectionId;
-            
+
             // find the game that the player was playing in
             Game game = GameState.Instance.GetGame(connectionId);
 
@@ -175,7 +213,7 @@ namespace PaintWithFriends
             else if (game.Players.Count == 0)
             {
                 GameState.Instance.RemoveGame(game);
-            } 
+            }
             else
             {
                 Clients.Group(game.GroupId).disableStart();

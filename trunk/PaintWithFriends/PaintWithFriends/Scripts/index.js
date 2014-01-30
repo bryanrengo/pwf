@@ -16,14 +16,16 @@ $(function () {
         var self = this;
 
         // viewmodel properties    
+        self.hub = $.connection.gameHub;
         self.playerName = ko.observable("");
         self.playerId = ko.observable("");
+        self.players = ko.observableArray([]);
         self.guess = ko.observable("");
         self.isConnected = ko.observable(false);
         self.isPlaying = ko.observable(false);
         self.isReady = ko.observable(false);
-        self.players = ko.observableArray([]);
-        self.hub = $.connection.gameHub;
+        self.chats = ko.observableArray([]);
+        self.chat = ko.observable("");
 
         // connect to hub
         $.connection.hub.start().done(function () {
@@ -31,6 +33,16 @@ $(function () {
         });
 
         // viewmodel methods
+        self.submitChat = function () {
+            // submit the chat to the server
+            self.hub.server.submitChat(self.chat());
+
+            // reset the chat property
+            self.chat("");
+
+            // set the focus of the chat textbox
+            $('#chatBox').focus();
+        }
 
         // joinGame method
         self.joinGame = function () {
@@ -57,7 +69,7 @@ $(function () {
 
         // guessValue method
         self.guessValue = function () {
-            var correctGuess = self.hub.server.guess(self.guess());
+            var correctGuess = self.hub.server.guess(self.chat());
 
             if (!correctGuess) {
                 console.log('sorry charlie! try again');
@@ -101,7 +113,23 @@ $(function () {
         };
 
         self.hub.client.endGame = function (winner) {
-            alert(winner + " has won!");
+            
+        };
+
+        self.hub.client.sendChat = function (msg) {
+            self.chats.push(msg);
+
+            var myDiv = $("#chatDiv");
+
+            var ul = myDiv.find("ul:first")[0]
+
+            if (ul) {
+                var scrollHeight = ul.scrollHeight;
+
+                if (scrollHeight > myDiv.height()) {
+                    myDiv.animate({ scrollTop: scrollHeight }, 1000);
+                }
+            }
         };
 
         // fn called when signalr hub is notifying player of an incorrect guess by another player.
