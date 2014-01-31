@@ -272,6 +272,7 @@
     <Content Include="Content\sass\foundation\_settings.scss" />
     <Content Include="Content\sass\normalize.scss" />
     <Content Include="Content\sass\_base.scss" />
+    <Content Include="config.rb" />
     <None Include="Properties\PublishProfiles\purplemonkeydishwasher.com - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="loaderio-7367fc1772b743cc4e84a690b03ca771.html" />
