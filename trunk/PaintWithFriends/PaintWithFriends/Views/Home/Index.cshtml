@@ -28,60 +28,77 @@
     <div class="medium-4 columns">
         <div class="panel medium-12 columns">
             <h4>Players</h4>
-            <ul id="playerList"></ul>
+            <ul data-bind="foreach: players">
+                <li>
+                    <span data-bind="text: Name"></span>
+                    <img src="" alt="isDrawer" data-bind="visible: IsDrawer" />
+                </li>
+            </ul>
         </div>
 
         <div class="join-container medium-12 columns">
-            <div class="small-8 columns">
-                <input type="text" id="playerText" placeholder="Name" data-bind="value: playerName" />
-            </div>
-            <div class="small-4 columns">
-                <input type="button" value="join" id="joinButton" class="small button" />
-            </div>
-            <input type="button" value="clear" id="clearButton" class="small  secondary button" />
+            <form data-bind="submit: joinGame">
+                <div class="small-8 columns">
+                    <input type="text" data-bind="value: playerName" placeholder="Name" />
+                </div>
+                <div class="small-4 columns">
+                    <input type="submit" value="join" data-bind="enable: isConnected" class="small button" />
+                </div>
+            </form>
+
+            <input type="button" value="clear" data-bind="click: clearCanvas, visible: isPlaying" class="small secondary button" />
 
             <p class="playerName">Welcome <span data-bind="text: playerName"></span></p>
-            
-            
-            
-        </div>
-        
-        <div class="small-12 columns">
-            <input type="button" class="large button small-12 columns" value="start" id="startButton" disabled="disabled" />
         </div>
 
+        <div class="small-12 columns">
+            <input type="button" value="start" data-bind="click: startGame, enable: isReady" class="large button small-12 columns" />
+        </div>
     </div>
 </div>
 
-<div class="row container-bottom">
+<div class="row container-bottom" data-bind="visible: false">
 
     <div class="progress small-8  radius round">
         <span class="meter" style="width: 100%"></span>
     </div>
 
-    
-
-
-
     <h2><span data-bind="text: guess"></span></h2>
 
     <div class="small-4 columns">
-        <input type="text" id="guessText" placeholder="It's a..." />
+        <input type="text" data-bind="value: guess" placeholder="It's a..." />
     </div>
     <div class="small-8 columns">
-        <input type="button" value="guess" id="guessButton" class="small button" />
     </div>
-
-    
 
 </div>
 
+<div class="row container-bottom">
 
+    <div class="small-12 columns">
+        <div id="chatDiv" style="overflow: auto; border: 1px gray solid; height:190px;">
+            <ul data-bind="foreach: chats" style="list-style-type: circle;">
+                <li>
+                    <span data-bind="text: PlayerName"></span>: 
+                <span data-bind="text: Message"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="small-12 columns"><span>&nbsp;</span></div>
 
-@*
-<input type="button" value="clear" id="clearButton" />
+    <form data-bind="submit: submitChat">
 
-<input type="text" id="playerText" />
-<input type="button" value="join" id="joinButton" disabled="disabled" />
+        <div class="small-4 columns">
+            <input type="text" id="chatBox" data-bind="value: chat" />
+        </div>
 
-<p id="userText"></p>*@
+        <div class="small-8 columns">
+            <input type="submit" value="enter" class="small button" />
+            <input type="button" value="guess" data-bind="click: guessValue, enable: isPlaying" class="small button" />
+        </div>
+
+    </form>
+
+</div>
