@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintWithFriends", "PaintWi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiDraw", "MultiDraw\MultiDraw.csproj", "{0BFE2F2B-FD7F-44CB-B6F4-E8063822091C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniIRC", "MiniIRC\MiniIRC.csproj", "{F809BA19-C10B-41FF-8D77-DF6AB51903E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{0BFE2F2B-FD7F-44CB-B6F4-E8063822091C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BFE2F2B-FD7F-44CB-B6F4-E8063822091C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BFE2F2B-FD7F-44CB-B6F4-E8063822091C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F809BA19-C10B-41FF-8D77-DF6AB51903E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F809BA19-C10B-41FF-8D77-DF6AB51903E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F809BA19-C10B-41FF-8D77-DF6AB51903E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F809BA19-C10B-41FF-8D77-DF6AB51903E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
