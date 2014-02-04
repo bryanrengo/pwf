@@ -195,8 +195,9 @@ $(function () {
     function drawAction(e) {
         // make sure that the mouse is clicked and the target of the draw event is inside the canvas element
         if (_c.mouseclicked && e.gesture.target.id != "") {
-            var rx = e.gesture.srcEvent.offsetX;
-            var ry = e.gesture.srcEvent.offsetY;
+            console.log(e);
+            var rx = e.gesture.touches[0].layerX;
+            var ry = e.gesture.touches[0].layerY;
 
             _c.canvasContext.lineWidth = "1.0";
             _c.canvasContext.beginPath();
@@ -217,8 +218,8 @@ $(function () {
 
     function startDrawAction(e) {
         _c.mouseclicked = true;
-        _c.lastPoint.x = e.gesture.srcEvent.offsetX;
-        _c.lastPoint.y = e.gesture.srcEvent.offsetY;
+        _c.lastPoint.x = e.gesture.touches[0].layerX;
+        _c.lastPoint.y = e.gesture.touches[0].layerY;
     }
 
     /// removed old code and using new code that utilizes crossbrowser touch library Hammer
