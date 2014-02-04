@@ -196,8 +196,8 @@ $(function () {
         // make sure that the mouse is clicked and the target of the draw event is inside the canvas element
         if (_c.mouseclicked && e.gesture.target.id != "") {
             console.log(e);
-            var rx = e.gesture.touches[0].layerX;
-            var ry = e.gesture.touches[0].layerY;
+            var rx = getCoords(e.gesture.touches[0]).x;
+            var ry = getCoords(e.gesture.touches[0]).y;
 
             _c.canvasContext.lineWidth = "1.0";
             _c.canvasContext.beginPath();
@@ -218,40 +218,38 @@ $(function () {
 
     function startDrawAction(e) {
         _c.mouseclicked = true;
-        _c.lastPoint.x = e.gesture.touches[0].layerX;
-        _c.lastPoint.y = e.gesture.touches[0].layerY;
+        _c.lastPoint.x = getCoords(e.gesture.touches[0]).x;
+        _c.lastPoint.y = getCoords(e.gesture.touches[0]).y;
     }
 
-    /// removed old code and using new code that utilizes crossbrowser touch library Hammer
-    //function mouseup_drawaction(e) {
-    //    if (e.which === 1) _c.mouseclicked = false;
-    //}
+    // Get the coordinates for a mouse or touch event
+    function getCoords(e) {
+        if (e.offsetX) {
+            // Works in Chrome / Safari (except on iPad/iPhone)
+            return { x: e.offsetX, y: e.offsetY };
+        }
+        else if (e.layerX) {
+            // Works in Firefox
+            return { x: e.layerX, y: e.layerY };
+        }
+        else {
+            // Works in Safari on iPad/iPhone
+            return { x: e.pageX - findPos(_c.canvasElement).left, y: e.pageY - findPos(_c.canvasElement).top };
+        }
+    }
 
-    //function mousedown_drawaction(e, o) {
-    //    if (e.which === 1) _c.mouseclicked = true;
-    //    var parentOffset = $(o).parent().offset();
-    //    _c.lastPoint.x = (e.pageX - parentOffset.left);
-    //    _c.lastPoint.y = (e.pageY - parentOffset.top);
-    //}
+    function findPos(obj) {
+        var curleft = curtop = 0;
 
-    //function mousemove_drawaction(e, o) {
-    //    if (_c.mouseclicked) {
-    //        var parentOffset = $(o).parent().offset();
-    //        var rx = (e.pageX - parentOffset.left);
-    //        var ry = (e.pageY - parentOffset.top);
+        if (obj.offsetParent) {
+            do {
+                curleft += obj.offsetLeft;
+                curtop += obj.offsetTop;
+            } while (obj = obj.offsetParent);
 
-    //        _c.canvasContext.lineWidth = "1.0";
-    //        _c.canvasContext.beginPath();
-    //        _c.canvasContext.moveTo(_c.lastPoint.x, _c.lastPoint.y);
-    //        _c.canvasContext.lineTo(rx, ry);
-    //        _c.canvasContext.stroke();
-
-    //        addSegment(_c.lastPoint.x, _c.lastPoint.y, rx, ry);
-
-    //        _c.lastPoint.x = rx;
-    //        _c.lastPoint.y = ry;
-    //    }
-    //}
+            return { left: curleft, top: curtop };
+        }
+    }
 
     function addSegment(x_from, y_from, x_to, y_to) {
         var seg = {};
