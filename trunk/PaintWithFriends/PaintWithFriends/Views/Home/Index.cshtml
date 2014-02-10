@@ -10,8 +10,6 @@
     <script src="~/signalr/hubs"></script>
     <script src="~/Scripts/jquery.hammer.js" type="text/javascript"></script>
     <script src="~/Scripts/index.js" type="text/javascript"></script>
-
-
 }
 
 <div class="row top-row">
@@ -31,46 +29,32 @@
             <ul data-bind="foreach: players">
                 <li>
                     <span data-bind="text: Name"></span>
-                    <img src="" alt="isDrawer" data-bind="visible: IsDrawer" />
+                    <img src="~/content/images/brush.png" alt="isDrawer" data-bind="visible: IsDrawer" />
                 </li>
             </ul>
         </div>
 
         <div class="join-container medium-12 columns">
-            <form data-bind="submit: joinGame">
+            <form data-bind="submit: joinGame, visible: playerName().length == 0">
                 <div class="small-8 columns">
-                    <input type="text" data-bind="value: playerName" placeholder="Name" />
+                    <input id="playerName" type="text" data-bind="value: playerName" placeholder="Name" />
                 </div>
                 <div class="small-4 columns">
                     <input type="submit" value="join" data-bind="enable: isConnected" class="small button" />
                 </div>
             </form>
 
-            <input type="button" value="clear" data-bind="click: clearCanvas, visible: isPlaying" class="small secondary button" />
+            <p data-bind="visible: playerName().length > 0">Welcome <span data-bind="text: playerName"></span></p>
 
-            <p class="playerName">Welcome <span data-bind="text: playerName"></span></p>
+            <p data-bind="visible: match().length > 0">Your word is : <span data-bind="text: match"></span></p>
         </div>
 
         <div class="small-12 columns">
-            <input type="button" value="start" data-bind="click: startGame, enable: isReady" class="large button small-12 columns" />
+            <input type="button" value="start" data-bind="click: startGame, visible: isDrawer, enable: isReady" class="large button small-12 columns" />     
+
+            <input type="button" value="clear" data-bind="click: clearCanvas, visible: isDrawer, enable: isPlaying" class="small secondary small-12 button" />
         </div>
     </div>
-</div>
-
-<div class="row container-bottom" data-bind="visible: false">
-
-    <div class="progress small-8  radius round">
-        <span class="meter" style="width: 100%"></span>
-    </div>
-
-    <h2><span data-bind="text: guess"></span></h2>
-
-    <div class="small-4 columns">
-        <input type="text" data-bind="value: guess" placeholder="It's a..." />
-    </div>
-    <div class="small-8 columns">
-    </div>
-
 </div>
 
 <div class="row container-bottom">
@@ -88,14 +72,14 @@
     
     <div class="small-12 columns"><span>&nbsp;</span></div>
 
-    <form data-bind="submit: submitChat">
+    <form data-bind="submit: submitChat, enable: player() != null">
 
         <div class="small-4 columns">
             <input type="text" id="chatBox" data-bind="value: chat" />
         </div>
 
         <div class="small-8 columns">
-            <input type="submit" value="enter" class="small button" />
+            <input type="submit" value="enter" data-bind="enable: player() != null" class="small button" />
             <input type="button" value="guess" data-bind="click: guessValue, enable: isPlaying" class="small button" />
         </div>
 

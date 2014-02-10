@@ -162,9 +162,11 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\brush.png" />
     <Content Include="Content\images\easel.jpg" />
     <Content Include="Content\images\frame-bg-1200.jpg" />
     <Content Include="Content\images\Gold-Embossed-Frame-Backgrounds-1200.jpg" />
+    <Content Include="Content\images\Paint_brush.png" />
     <Content Include="Content\images\paper-background.jpg" />
     <Content Include="Content\images\simon.jpg" />
     <Content Include="Content\sass\site.css">

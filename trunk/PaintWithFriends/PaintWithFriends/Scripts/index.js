@@ -1,6 +1,9 @@
 ﻿_c = typeof (_c) == "undefined" ? {} : _c;
 
 $(function () {
+    // remove all autocompletes on all the inputs, not needed in this game
+    $("input").attr("autocomplete", "off");
+    $("#playerName").focus();
 
     // setup the canvas global stuff
     _c.canvas = $("#canvas");
@@ -19,17 +22,27 @@ $(function () {
         self.hub = $.connection.gameHub;
         self.playerName = ko.observable("");
         self.playerId = ko.observable("");
+        self.player = ko.observable();
+        self.match = ko.observable("");
         self.players = ko.observableArray([]);
         self.guess = ko.observable("");
         self.isConnected = ko.observable(false);
         self.isPlaying = ko.observable(false);
         self.isReady = ko.observable(false);
+        self.isDrawer = ko.observable(false);
         self.chats = ko.observableArray([]);
         self.chat = ko.observable("");
 
         // connect to hub
         $.connection.hub.start().done(function () {
             self.isConnected(true);
+
+            self.hub.server.getPlayers().done(function (players) {
+                for (var i in players) {
+                    var player = players[i];
+                    self.players.push(player);
+                }
+            });
         });
 
         // viewmodel methods
@@ -48,15 +61,14 @@ $(function () {
         self.joinGame = function () {
 
             // get the playerName from the viewModel
-            var player = self.playerName();
+            var playerName = self.playerName();
 
             // submit join method to the hub
-            self.hub.server.join(player).done(function (isPlayer) {
-                // returns a boolean
-                if (isPlayer) {
-                    self.playerId(self.hub.state.playerId);
-                    self.isConnected(true);
-                    self.isReady(true);
+            self.hub.server.join(playerName).done(function (player) {
+                // returns a player
+                if (player) {
+                    self.player(player);
+                    self.isDrawer(player.IsDrawer);
                 }
             });
         };
@@ -69,11 +81,20 @@ $(function () {
 
         // guessValue method
         self.guessValue = function () {
-            var correctGuess = self.hub.server.guess(self.chat());
+            var correctGuess = self.hub.server.guess(self.chat()).done(function (correctGuess) {
+                if (!correctGuess) {
+                    addChat({
+                        Message: 'sorry charlie! try again',
+                        PlayerName: self.playerName()
+                    });
+                }
+            });
 
-            if (!correctGuess) {
-                console.log('sorry charlie! try again');
-            }
+            // reset the chat property
+            self.chat("");
+
+            // set the focus of the chat textbox
+            $('#chatBox').focus();
         };
 
         // clearCanvas method
@@ -84,9 +105,21 @@ $(function () {
 
         // hub methods 
         self.hub.client.playersInGame = function (players) {
+            self.players.removeAll();
+
             for (var i in players) {
                 var player = players[i];
                 self.players.push(player);
+
+                // update binding from the server
+                if (self.player() && self.player().ConnectionId === player.ConnectionId) {
+                    self.player(player);
+                    self.isDrawer(player.IsDrawer);
+                    self.match("");
+                    if (self.isDrawer()) {
+                        self.isReady(true);
+                    }
+                }
             }
         };
 
@@ -95,54 +128,68 @@ $(function () {
         };
 
         self.hub.client.playerLeft = function (player) {
-            self.players.pop(player);
+            addChat({
+                PlayerName: "server",
+                Message: "player '" + player.Name + "' has left the game"
+            });
         };
 
         self.hub.client.disableStart = function () {
             self.isReady(false);
         };
 
+        self.hub.client.waitingForPlayers = function (player) {
+            addChat({
+                PlayerName: "server",
+                Message: "player '" + player.Name + "' joined, waiting for additional players"
+            });
+        };
+
         self.hub.client.enableStart = function () {
+            for (playerIndex in self.players()) {
+                if (self.players()[playerIndex] === self.player()) {
+                    console.log(self.player());
+                }
+            }
+
             self.isReady(true);
-        }
+        };
 
         self.hub.client.startGame = function (interval) {
-            _startCountdown();
+            startCountdown(interval);
             self.isPlaying(true);
-            console.log('set the timer interval for guessing and drawing');
         };
 
         self.hub.client.endGame = function (winner) {
-            
+            addChat({
+                PlayerName: "server",
+                Message: "player " + winner.Name + " has won! new game drawer being chosen..."
+            });
+            self.isReady(false);
+            clearCanvas();
         };
 
         self.hub.client.sendChat = function (msg) {
-            self.chats.push(msg);
-
-            var myDiv = $("#chatDiv");
-
-            var ul = myDiv.find("ul:first")[0]
-
-            if (ul) {
-                var scrollHeight = ul.scrollHeight;
-
-                if (scrollHeight > myDiv.height()) {
-                    myDiv.animate({ scrollTop: scrollHeight }, 1000);
-                }
-            }
+            addChat(msg);
         };
 
         // fn called when signalr hub is notifying player of an incorrect guess by another player.
         self.hub.client.incorrectGuess = function (msg) {
-            console.log('Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!');
+            addChat({
+                PlayerName: "server",
+                Message: 'Player [' + msg.playerName + '] guessed [' + msg.guess + '] which was WRONG!!'
+            });
         };
 
-        self.hub.client.enableDrawing = function (interval) {
+        self.hub.client.enableDrawing = function (interval, match) {
+            self.match(match);
+            startCountdown(interval);
             _c.canvas.hammer().on('touch', function (e) {
                 startDrawAction(e);
             });
 
             _c.canvas.hammer().on('drag', function (e) {
+                e.gesture.preventDefault();
                 drawAction(e);
             });
 
@@ -151,15 +198,14 @@ $(function () {
             });
 
             _c.canvas.css('cursor', 'crosshair');
-        }
+        };
 
         self.hub.client.disableDrawing = function () {
             _c.canvas.unbind('mouseup');
             _c.canvas.unbind('mousedown');
             _c.canvas.unbind('mousemove');
-            $("#clearButton").attr('disabled', 'disabled');
             _c.canvas.css('cursor', 'pointer');
-        }
+        };
 
         self.hub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
             _c.canvasContext.lineWidth = "1.0";
@@ -167,7 +213,7 @@ $(function () {
             _c.canvasContext.moveTo(x_from, y_from);
             _c.canvasContext.lineTo(x_to, y_to);
             _c.canvasContext.stroke();
-        }
+        };
 
         self.hub.client.drawSegments = function (segments) {
             for (var i = 0; i < segments.length; i++) {
@@ -177,19 +223,35 @@ $(function () {
                 _c.canvasContext.lineTo(segments[i].x_to, segments[i].y_to);
                 _c.canvasContext.stroke();
             }
-        }
+        };
 
         self.hub.client.clear = function () {
             clearCanvas();
+        };
+
+        function addChat(msg) {
+            self.chats.push(msg);
+
+            var myDiv = $("#chatDiv");
+
+            var ul = myDiv.find("ul:first")[0];
+
+            if (ul) {
+                var scrollHeight = ul.scrollHeight;
+
+                if (scrollHeight > myDiv.height()) {
+                    myDiv.animate({ scrollTop: scrollHeight }, 1000);
+                }
+            }
         }
     }
 
     var gameVM = new gameViewModel();
 
     ko.applyBindings(gameVM);
-    
+
     function clearCanvas() {
-        _c.canvas.clearRect(0, 0, _c.canvas.width, _c.canvas.height);
+        _c.canvasContext.clearRect(0, 0, _c.canvas.width(), _c.canvas.height());
     }
 
     function drawAction(e) {
@@ -299,11 +361,11 @@ $(function () {
         c.attr("height", height);
     }
 
-    function _startCountdown() {
+    function startCountdown(interval) {
         var progressBar = $(".meter");
         setInterval(function () {
             progressBar.width(progressBar.width() - 1);
-        }, 100);
+        }, interval);
     }
 });
 

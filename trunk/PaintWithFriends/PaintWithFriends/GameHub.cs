@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using PaintWithFriends.Models;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace PaintWithFriends
 {
@@ -13,6 +14,12 @@ namespace PaintWithFriends
     {
         public class ChatMessage
         {
+            public ChatMessage(string playerName, string message)
+            {
+                this.PlayerName = playerName;
+                this.Message = message;
+            }
+
             public string PlayerName { get; set; }
             public string Message { get; set; }
         }
@@ -33,7 +40,6 @@ namespace PaintWithFriends
         public void DrawSegment(int x_from, int y_from, int x_to, int y_to)
         {
             Clients.AllExcept(new string[] { Context.ConnectionId }).drawSegment(x_from, y_from, x_to, y_to);
-            Clients.All.messageFromServer("test");
         }
 
         public void PushSegmentArray(segment[] segments)
@@ -53,11 +59,25 @@ namespace PaintWithFriends
             PushSegmentArray(segments);
         }
 
-        public bool Join(string playerName)
+        public List<Player> GetPlayers()
+        {
+            List<Player> players = new List<Player>();
+
+            Game game = GameState.Instance.GetGame();
+
+            if (game != null)
+            {
+                players.AddRange(game.Players.Values);
+            }
+           
+            return players;
+        }
+
+        public Player Join(string playerName)
         {
             if (string.IsNullOrEmpty(playerName))
             {
-                return false;
+                return null;
             }
 
             // find or create a new player, automatically adding them to the game if there is one currently queued
@@ -81,17 +101,19 @@ namespace PaintWithFriends
             {
                 // can start game if player count is 3 or more
                 Clients.Client(game.Drawer.ConnectionId).enableStart();
+
+                Clients.Group(game.GroupId).sendChat(new ChatMessage("server", "waiting for player '" + game.Drawer.Name + "' to start the game"));
             }
             else
             {
                 // tell everyone we're waiting for more players
-                // Clients.Group(game.GroupId).enableDrawing(60);
+                Clients.Group(game.GroupId).waitingForPlayers(player);
             }
 
             // send the playerId to the client caller
             Clients.Caller.playerId = player.ConnectionId;
 
-            return player != null;
+            return player;
         }
 
         public bool Start()
@@ -105,7 +127,7 @@ namespace PaintWithFriends
             if (game != null)
             {
                 // enable drawing on the drawer
-                Clients.Client(game.Drawer.ConnectionId).enableDrawing(60);
+                Clients.Client(game.Drawer.ConnectionId).enableDrawing(60, game.Match);
 
                 // start the game on the rest of the players
                 Clients.Group(game.GroupId, game.Drawer.ConnectionId).startGame(60);
@@ -131,6 +153,13 @@ namespace PaintWithFriends
 
                 // communicate that the current guess is the winner
                 Clients.Group(game.GroupId).endGame(winner);
+
+                game.ResetGame();
+
+                // send the new player the list of current players
+                Clients.Group(game.GroupId).playersInGame(game.Players);
+
+                //Clients.Group(game.GroupId).sendChat(new ChatMessage("server", "waiting for player '" + game.Drawer.Name + "' to start the game"));
 
                 return true;
             }
@@ -173,7 +202,7 @@ namespace PaintWithFriends
                     }
                 }
 
-                Clients.Group(player.Game.GroupId).sendChat(new ChatMessage() { Message = chatOutput, PlayerName = player.Name });
+                Clients.Group(player.Game.GroupId).sendChat(new ChatMessage(player.Name, chatOutput));
             }
         }
 
@@ -198,12 +227,19 @@ namespace PaintWithFriends
                 GameState.Instance.RemovePlayer(Context.ConnectionId);
 
                 game.Drawer = game.Players.Values.FirstOrDefault();
+                game.Drawer.IsDrawer = true;
+
+                // send the new player the list of current players
+                Clients.Group(game.GroupId).playersInGame(game.Players);
             }
             else
             {
                 // remove the player from the game state
                 GameState.Instance.RemovePlayer(Context.ConnectionId);
             }
+            
+            // send the new player the list of current players
+            Clients.Group(game.GroupId).playersInGame(game.Players);
 
             // notify the drawer client to enable start if there is 3 or greater
             if (game.Players.Count >= 3)

@@ -47,6 +47,11 @@ namespace PaintWithFriends.Models
             return  _games.Values.Select(p => p.Players.Values.FirstOrDefault(v => v.ConnectionId == connectionId)).FirstOrDefault();
         }
 
+        public Game GetGame()
+        {
+            return _games.Values.FirstOrDefault(p => !p.IsRunning);
+        }
+
         /// <summary>
         /// Gets the game.
         /// </summary>

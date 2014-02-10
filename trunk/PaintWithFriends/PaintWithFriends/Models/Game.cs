@@ -26,5 +26,20 @@ namespace PaintWithFriends.Models
         {
             return string.Equals(guess, this.Match, StringComparison.OrdinalIgnoreCase);
         }
+
+        public void ResetGame()
+        {
+            this.IsRunning = false;
+
+            var currentDrawer = this.Drawer;
+
+            var newDrawer = this.Players.Values.FirstOrDefault(p => !p.IsDrawer);
+
+            currentDrawer.IsDrawer = false;
+
+            this.Drawer = newDrawer;
+            this.Drawer.IsDrawer = true;
+
+        }
     }
 }
