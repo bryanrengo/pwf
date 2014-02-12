@@ -2,7 +2,6 @@
 
 $(function () {
     // remove all autocompletes on all the inputs, not needed in this game
-    $("input").attr("autocomplete", "off");
     $("#playerName").focus();
 
     // setup the canvas global stuff
