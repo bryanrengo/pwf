@@ -32,17 +32,6 @@ $(function () {
         self.chats = ko.observableArray([]);
         self.chat = ko.observable("");
 
-        // connect to hub
-        $.connection.hub.start().done(function () {
-            self.isConnected(true);
-
-            self.hub.server.getPlayers().done(function (players) {
-                for (var i in players) {
-                    var player = players[i];
-                    self.players.push(player);
-                }
-            });
-        });
 
         // viewmodel methods
         self.submitChat = function () {
@@ -243,6 +232,18 @@ $(function () {
                 }
             }
         }
+
+        // connect to hub
+        $.connection.hub.start().done(function () {
+            self.isConnected(true);
+
+            //self.hub.server.getPlayers().done(function (players) {
+            //    for (var i in players) {
+            //        var player = players[i];
+            //        self.players.push(player);
+            //    }
+            //});
+        });
     }
 
     var gameVM = new gameViewModel();
