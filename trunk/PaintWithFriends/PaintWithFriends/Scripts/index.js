@@ -1,8 +1,16 @@
 ﻿_c = typeof (_c) == "undefined" ? {} : _c;
 
 $(function () {
+    ko.bindingHandlers.hidden = {
+        update: function (element, valueAccessor) {
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            ko.bindingHandlers.visible.update(element, function () { return !value; });
+        }
+    };
+
     // remove all autocompletes on all the inputs, not needed in this game
     $("#playerName").focus();
+    $("input").attr("autocomplete", "off");
 
     // setup the canvas global stuff
     _c.canvas = $("#canvas");
@@ -32,6 +40,9 @@ $(function () {
         self.chats = ko.observableArray([]);
         self.chat = ko.observable("");
 
+        self.isPlayerJoined = ko.computed(function () {
+            return self.player() == null;
+        });
 
         // viewmodel methods
         self.submitChat = function () {

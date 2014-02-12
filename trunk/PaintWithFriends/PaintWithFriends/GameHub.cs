@@ -90,6 +90,10 @@ namespace PaintWithFriends
             {
                 game = GameState.Instance.GetGame(player);
             }
+            else
+            {
+                game = player.Game;
+            }
 
             // send the new player the list of current players
             Clients.Client(player.ConnectionId).playersInGame(game.Players);

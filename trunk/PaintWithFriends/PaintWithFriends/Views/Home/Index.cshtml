@@ -35,16 +35,16 @@
         </div>
 
         <div class="join-container medium-12 columns">
-            <form data-bind="submit: joinGame, visible: playerName().length == 0">
+            <form data-bind="submit: joinGame, visible: isPlayerJoined">
                 <div class="small-8 columns">
                     <input id="playerName" type="text" data-bind="value: playerName" placeholder="Name" />
                 </div>
                 <div class="small-4 columns">
-                    <input type="submit" value="join" data-bind="enable: isConnected" class="small button" />
+                    <input type="submit" value="join" data-bind="click: joinGame, enable: isConnected" class="small button" />
                 </div>
             </form>
 
-            <p data-bind="visible: playerName().length > 0">Welcome <span data-bind="text: playerName"></span></p>
+            <p data-bind="hidden: isPlayerJoined">Welcome <span data-bind="    text: playerName"></span></p>
 
             <p data-bind="visible: match().length > 0">Your word is : <span data-bind="text: match"></span></p>
         </div>
