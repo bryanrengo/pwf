@@ -34,7 +34,12 @@ namespace PaintWithFriends
 
         public void Clear()
         {
-            Clients.AllExcept(new string[] { Context.ConnectionId }).clear();
+            Game game = GameState.Instance.GetGame(Context.ConnectionId);
+
+            if (game != null)
+            {
+                Clients.Group(game.GroupId).clear();
+            }
         }
 
         public void DrawSegment(int x_from, int y_from, int x_to, int y_to)

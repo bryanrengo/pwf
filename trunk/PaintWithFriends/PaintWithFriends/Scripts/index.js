@@ -116,7 +116,7 @@ $(function () {
                     self.isDrawer(player.IsDrawer);
                     self.match("");
                     if (self.isDrawer()) {
-                        self.isReady(true);
+                        //self.isReady(true);
                     }
                 }
             }
@@ -182,7 +182,8 @@ $(function () {
 
         self.hub.client.enableDrawing = function (interval, match) {
             self.match(match);
-            startCountdown(interval);
+            startCountdown(interval); 
+            self.isPlaying(true);
             _c.canvas.hammer().on('touch', function (e) {
                 startDrawAction(e);
             });
@@ -248,12 +249,12 @@ $(function () {
         $.connection.hub.start().done(function () {
             self.isConnected(true);
 
-            //self.hub.server.getPlayers().done(function (players) {
-            //    for (var i in players) {
-            //        var player = players[i];
-            //        self.players.push(player);
-            //    }
-            //});
+            self.hub.server.getPlayers().done(function (players) {
+                for (var i in players) {
+                    var player = players[i];
+                    self.players.push(player);
+                }
+            });
         });
     }
 
