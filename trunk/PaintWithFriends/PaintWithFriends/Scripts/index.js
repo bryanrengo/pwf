@@ -1,5 +1,5 @@
 ﻿_c = typeof (_c) == "undefined" ? {} : _c;
-
+// this is to publish to pwfs
 $(function () {
     ko.bindingHandlers.hidden = {
         update: function (element, valueAccessor) {
