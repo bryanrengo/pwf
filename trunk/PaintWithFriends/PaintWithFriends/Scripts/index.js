@@ -18,8 +18,11 @@ $(function () {
     _c.canvasContext = _c.canvasElement.getContext("2d");
     _c.lastPoint = {};
     _c.segments = [];
+    _c.segmentHistory = [];
+    _c.initialCanvasWidth = 0;
+    _c.initialCanvasHeight = 0;
 
-    setInterval(function () { doSegmentPush() }, 50);
+    setInterval(function () { doSegmentPush(); }, 50);
 
     // create the knockout viewmodel
     function gameViewModel() {
@@ -207,22 +210,23 @@ $(function () {
             _c.canvas.css('cursor', 'pointer');
         };
 
-        self.hub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
-            _c.canvasContext.lineWidth = "1.0";
-            _c.canvasContext.beginPath();
-            _c.canvasContext.moveTo(x_from, y_from);
-            _c.canvasContext.lineTo(x_to, y_to);
-            _c.canvasContext.stroke();
-        };
+        //self.hub.client.drawSegment = function (x_from, y_from, x_to, y_to) {
+        //    _c.canvasContext.lineWidth = "1.0";
+        //    _c.canvasContext.beginPath();
+        //    _c.canvasContext.moveTo(x_from, y_from);
+        //    _c.canvasContext.lineTo(x_to, y_to);
+        //    _c.canvasContext.stroke();
+        //};
 
         self.hub.client.drawSegments = function (segments) {
             for (var i = 0; i < segments.length; i++) {
                 _c.canvasContext.lineWidth = "1.0";
                 _c.canvasContext.beginPath();
-                _c.canvasContext.moveTo(segments[i].x_from, segments[i].y_from);
-                _c.canvasContext.lineTo(segments[i].x_to, segments[i].y_to);
+                _c.canvasContext.moveTo((segments[i].x_from / 1000) * _c.canvas.width(), (segments[i].y_from / 1000) * _c.canvas.height());
+                _c.canvasContext.lineTo((segments[i].x_to / 1000) * _c.canvas.width(), (segments[i].y_to / 1000) * _c.canvas.height());
                 _c.canvasContext.stroke();
             }
+            _c.segmentHistory = _c.segmentHistory.concat(segments);
         };
 
         self.hub.client.clear = function () {
@@ -264,6 +268,7 @@ $(function () {
 
     function clearCanvas() {
         _c.canvasContext.clearRect(0, 0, _c.canvas.width(), _c.canvas.height());
+        _c.segmentHistory = [];
     }
 
     function drawAction(e) {
@@ -327,11 +332,12 @@ $(function () {
 
     function addSegment(x_from, y_from, x_to, y_to) {
         var seg = {};
-        seg.x_from = x_from | 0;
-        seg.y_from = y_from | 0;
-        seg.x_to = x_to | 0;
-        seg.y_to = y_to | 0;
+        seg.x_from = ((x_from / _c.canvas.width()) * 1000 | 0);
+        seg.y_from = ((y_from / _c.canvas.height()) * 1000 | 0);
+        seg.x_to = ((x_to / _c.canvas.width()) * 1000 | 0);
+        seg.y_to = ((y_to / _c.canvas.height()) * 1000 | 0);
         _c.segments.push(seg);
+        _c.segmentHistory.push(seg);
     }
 
     function doSegmentPush() {
@@ -346,6 +352,7 @@ $(function () {
 
     $(window).resize(function () {
         setCanvasSize();
+        drawSegmentHistory();
     });
 
     function setCanvasSize() {
@@ -363,6 +370,16 @@ $(function () {
         setInterval(function () {
             progressBar.width(progressBar.width() - 1);
         }, interval);
+    }
+
+    function drawSegmentHistory() {
+        _c.canvasContext.lineWidth = "1.0";
+        for(var i in _c.segmentHistory) {
+            _c.canvasContext.beginPath();
+            _c.canvasContext.moveTo((_c.segmentHistory[i].x_from / 1000) * _c.canvas.width(), (_c.segmentHistory[i].y_from / 1000) * _c.canvas.height());
+            _c.canvasContext.lineTo((_c.segmentHistory[i].x_to / 1000) * _c.canvas.width(), (_c.segmentHistory[i].y_to / 1000) * _c.canvas.height());
+            _c.canvasContext.stroke();
+        }
     }
 });
 
