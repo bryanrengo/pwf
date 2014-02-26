@@ -1,4 +1,6 @@
-﻿_c = typeof (_c) == "undefined" ? {} : _c;
+﻿//test comment
+
+_c = typeof (_c) == "undefined" ? {} : _c;
 // this is to publish to pwfs
 $(function () {
     ko.bindingHandlers.hidden = {
