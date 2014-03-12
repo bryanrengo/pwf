@@ -257,5 +257,18 @@ namespace PaintWithFriends
 
             return base.OnDisconnected();
         }
+
+        public void Reset(string name)
+        {
+            Game game = GameState.Instance.GetGame(Context.ConnectionId);
+            //game.Players.Clear();
+            //game.IsRunning = false;
+            GameState.Instance.RemoveGame(game);
+
+            Clients.AllExcept(Context.ConnectionId).reportReset(name);
+            //Clients.AllExcept(Context.ConnectionId).reloadPage();
+            Clients.Client(Context.ConnectionId).reloadPage();
+            
+        }
     }
 }

@@ -187,7 +187,7 @@ $(function () {
 
         self.hub.client.enableDrawing = function (interval, match) {
             self.match(match);
-            startCountdown(interval); 
+            startCountdown(interval);
             self.isPlaying(true);
             _c.canvas.hammer().on('touch', function (e) {
                 startDrawAction(e);
@@ -233,6 +233,15 @@ $(function () {
 
         self.hub.client.clear = function () {
             clearCanvas();
+        };
+
+        self.hub.client.reportReset = function (userName) {
+            alert("The game has been reset by " + userName);
+            reloadPage();
+        };
+
+        self.hub.client.reloadPage = function () {
+            reloadPage();
         };
 
         function addChat(msg) {
@@ -376,12 +385,33 @@ $(function () {
 
     function drawSegmentHistory() {
         _c.canvasContext.lineWidth = "1.0";
-        for(var i in _c.segmentHistory) {
+        for (var i in _c.segmentHistory) {
             _c.canvasContext.beginPath();
             _c.canvasContext.moveTo((_c.segmentHistory[i].x_from / 1000) * _c.canvas.width(), (_c.segmentHistory[i].y_from / 1000) * _c.canvas.height());
             _c.canvasContext.lineTo((_c.segmentHistory[i].x_to / 1000) * _c.canvas.width(), (_c.segmentHistory[i].y_to / 1000) * _c.canvas.height());
             _c.canvasContext.stroke();
         }
     }
+
+    _c.reset = function() {
+        gameVM.hub.server.reset(gameVM.playerName());
+    }
+
+    function reloadPage() {
+        var currentUrl = window.location.href;
+        var newUrl;
+        indexOfR = currentUrl.indexOf("?r=");
+        if (indexOfR == -1) {
+            newUrl = currentUrl + "?r=" + (new Date()).getTime();
+        } else {
+            newUrl = currentUrl.substring(0, currentUrl.indexOf("?r=")) + "?r=" + (new Date()).getTime();
+        }
+        window.location.href = newUrl;
+    }
+
 });
+
+function reset() {
+    (_c.reset)();
+}
 
