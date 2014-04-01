@@ -8,6 +8,8 @@ namespace PaintWithFriends
 {
     public class Startup
     {
+
+        // add a comment to deploy update to azure
         public void Configuration(IAppBuilder app)
         {
             app.MapSignalR();
