@@ -11,6 +11,15 @@ namespace PaintWithSignon
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+            "~/Scripts/jquery.signalR-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
+            "~/Scripts/knockout-{version}.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/hammer").Include(
+                "~/Scripts/jquery.hammer-full.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
