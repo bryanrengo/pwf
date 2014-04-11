@@ -9,28 +9,28 @@ namespace PaintWithSignon
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/vendors/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
-            "~/Scripts/jquery.signalR-{version}.js"));
+                        "~/Scripts/vendors/jquery.signalR-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-            "~/Scripts/knockout-{version}.js"));
+                        "~/Scripts/vendors/knockout-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/hammer").Include(
-                "~/Scripts/jquery.hammer-full.js"));
+                        "~/Scripts/vendors/jquery.hammer-full.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/vendors/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                        "~/Scripts/vendors/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/vendors/bootstrap.js",
+                      "~/Scripts/vendors/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
