@@ -12,8 +12,10 @@ appRoot
             .when('/demo', { templateUrl: '/home/demo', controller: 'DemoController' })
             .when('/angular', { templateUrl: '/home/angular' })
             .otherwise({ redirectTo: '/home' });
-
-        $locationProvider.html5Mode(true);
+        
+        $locationProvider
+           .html5Mode(true)
+           .hashPrefix('!');
     }])
     .controller('RootController', ['$scope', '$route', '$routeParams', '$location', function ($scope, $route, $routeParams, $location) {
         $scope.$on('$routeChangeSuccess', function (e, current, previous) {
