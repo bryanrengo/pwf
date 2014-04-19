@@ -17,12 +17,12 @@ namespace App
                 "~/scripts/angular/angular.js",
                 "~/scripts/angular/angular-route.js"));
 
-            bundles.Add(new ScriptBundle("~/js/app").Include(
-                "~/scripts/app.js",
-                "~/scripts/filters.js",
-                "~/scripts/services.js",
-                "~/scripts/directives.js",
-                "~/scripts/controllers.js"));
+            //bundles.Add(new ScriptBundle("~/js/app").Include(
+            //    "~/scripts/app.js",
+            //    "~/scripts/filters.js",
+            //    "~/scripts/services.js",
+            //    "~/scripts/directives.js",
+            //    "~/scripts/controllers.js"));
 
             bundles.Add(new StyleBundle("~/css/app").Include(
                 "~/styles/app.css"));
