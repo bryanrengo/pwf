@@ -149,9 +149,6 @@
     <Content Include="Scripts\app.js">
       <DependentUpon>app.ts</DependentUpon>
     </Content>
-    <Content Include="Scripts\app.min.js">
-      <DependentUpon>app.ts</DependentUpon>
-    </Content>
     <TypeScriptCompile Include="Scripts\_references.ts" />
     <TypeScriptCompile Include="Scripts\services.ts" />
     <TypeScriptCompile Include="Scripts\controllers.ts" />
@@ -160,19 +157,10 @@
     </Content>
     <TypeScriptCompile Include="Scripts\filters.ts" />
     <TypeScriptCompile Include="Scripts\directives.ts" />
-    <Content Include="Scripts\controllers.min.js">
-      <DependentUpon>controllers.ts</DependentUpon>
-    </Content>
     <Content Include="Scripts\directives.js">
       <DependentUpon>directives.ts</DependentUpon>
     </Content>
-    <Content Include="Scripts\directives.min.js">
-      <DependentUpon>directives.ts</DependentUpon>
-    </Content>
     <Content Include="Scripts\filters.js">
-      <DependentUpon>filters.ts</DependentUpon>
-    </Content>
-    <Content Include="Scripts\filters.min.js">
       <DependentUpon>filters.ts</DependentUpon>
     </Content>
     <Content Include="Scripts\angular\i18n\angular-locale_af-na.js" />
@@ -421,9 +409,6 @@
     <Content Include="Scripts\angular\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu.js" />
     <Content Include="Scripts\services.js">
-      <DependentUpon>services.ts</DependentUpon>
-    </Content>
-    <Content Include="Scripts\services.min.js">
       <DependentUpon>services.ts</DependentUpon>
     </Content>
     <Content Include="Scripts\_references.js">

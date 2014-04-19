@@ -13,20 +13,20 @@ namespace App
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/js/angular").Include(
+            bundles.Add(new Bundle("~/js/angular").Include(
                 "~/scripts/angular/angular.js"));
 
-            bundles.Add(new ScriptBundle("~/js/angular-route").Include(
+            bundles.Add(new Bundle("~/js/angular-route").Include(
                 "~/scripts/angular/angular-route.js"));
 
-            bundles.Add(new ScriptBundle("~/js/app").Include(
+            bundles.Add(new Bundle("~/js/app").Include(
                 "~/scripts/app.js",
                 "~/scripts/filters.js",
                 "~/scripts/services.js",
                 "~/scripts/directives.js",
                 "~/scripts/controllers.js"));
 
-            bundles.Add(new StyleBundle("~/css/app").Include(
+            bundles.Add(new Bundle("~/css/app").Include(
                 "~/styles/app.css"));
         }
     }

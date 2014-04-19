@@ -11,5 +11,4 @@ angular.module('app', ['app.filters', 'app.services', 'app.directives', 'app.con
             .when('/view1', { templateUrl: 'views/view1', controller: 'FirstCtrl' })
             .when('/view2', { templateUrl: 'views/view2', controller: 'SecondCtrl' })
             .otherwise({ redirectTo: '/view1' });
-
     }]);
