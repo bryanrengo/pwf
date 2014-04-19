@@ -14,7 +14,7 @@ namespace App
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            routes.LowercaseUrls = true;
+            //routes.LowercaseUrls = true;
 
             routes.MapWebPageRoute(
                 name: "Default",

@@ -14,10 +14,14 @@ namespace App
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new Bundle("~/js/angular").Include(
-                "~/scripts/angular/angular.js"));
-
-            bundles.Add(new Bundle("~/js/angular-route").Include(
+                "~/scripts/angular/angular.js",
                 "~/scripts/angular/angular-route.js"));
+
+            bundles.Add(new Bundle("~/js/jquery").Include(
+                "~/scripts/jquery/jquery-{version}.js"));
+
+            bundles.Add(new Bundle("~/js/bootstrap").Include(
+                "~/scripts/jquery/bootstrap.js"));
 
             bundles.Add(new Bundle("~/js/app").Include(
                 "~/scripts/app.js",
@@ -28,6 +32,9 @@ namespace App
 
             bundles.Add(new Bundle("~/css/app").Include(
                 "~/styles/app.css"));
+
+            bundles.Add(new Bundle("~/css/bootstrap").Include(
+                "~/styles/bootstrap.css"));
         }
     }
 }

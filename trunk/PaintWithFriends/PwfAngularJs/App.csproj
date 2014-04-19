@@ -122,6 +122,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Styles\bootstrap-theme.css" />
+    <Content Include="Styles\bootstrap-theme.min.css" />
+    <Content Include="Styles\bootstrap.css" />
+    <Content Include="Styles\bootstrap.min.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\logo.png" />
     <Content Include="Scripts\angular\angular-animate.js" />
@@ -152,6 +157,8 @@
     <TypeScriptCompile Include="Scripts\_references.ts" />
     <TypeScriptCompile Include="Scripts\services.ts" />
     <TypeScriptCompile Include="Scripts\controllers.ts" />
+    <Content Include="Scripts\bootstrap\bootstrap.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
     <Content Include="Scripts\controllers.js">
       <DependentUpon>controllers.ts</DependentUpon>
     </Content>
@@ -408,6 +415,14 @@
     <Content Include="Scripts\angular\i18n\angular-locale_zh.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu-za.js" />
     <Content Include="Scripts\angular\i18n\angular-locale_zu.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Styles\bootstrap-theme.css.map" />
+    <Content Include="Styles\bootstrap.css.map" />
+    <None Include="Scripts\jquery\jquery-1.9.0.intellisense.js" />
+    <Content Include="Scripts\jquery\jquery-1.9.0.js" />
+    <Content Include="Scripts\jquery\jquery-1.9.0.min.js" />
     <Content Include="Scripts\services.js">
       <DependentUpon>services.ts</DependentUpon>
     </Content>
@@ -455,6 +470,7 @@
     <Content Include="Scripts\angular\angular-cookies.min.js.map" />
     <Content Include="Scripts\angular\angular-animate.min.js.map" />
     <Content Include="Scripts\angular\angular.min.js.map" />
+    <Content Include="Scripts\jquery\jquery-1.9.0.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
