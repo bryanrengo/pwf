@@ -16,6 +16,10 @@ namespace App
         {
             //routes.LowercaseUrls = true;
 
+#if DEBUG
+    routes.Ignore("{*browserlink}", new { browserlink = @".*/arterySignalR/ping" });
+#endif
+
             routes.MapWebPageRoute(
                 name: "Default",
                 url: "{*url}",

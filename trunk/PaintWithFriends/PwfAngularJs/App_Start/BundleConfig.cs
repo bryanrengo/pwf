@@ -21,7 +21,10 @@ namespace App
                 "~/scripts/jquery/jquery-{version}.js"));
 
             bundles.Add(new Bundle("~/js/bootstrap").Include(
-                "~/scripts/jquery/bootstrap.js"));
+                "~/scripts/bootstrap/bootstrap.js"));
+
+            bundles.Add(new Bundle("~/js/signalr").Include(
+                "~/scripts/signalr/jquery.signalr-{version}.js"));
 
             bundles.Add(new Bundle("~/js/app").Include(
                 "~/scripts/app.js",

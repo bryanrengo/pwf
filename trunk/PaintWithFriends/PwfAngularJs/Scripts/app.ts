@@ -8,7 +8,8 @@ angular.module('app', ['app.filters', 'app.services', 'app.directives', 'app.con
         $httpProvider.interceptors.push('authInterceptor');
         $locationProvider.html5Mode(true);
         $routeProvider
-            .when('/view1', { templateUrl: 'views/view1', controller: 'FirstCtrl' })
-            .when('/view2', { templateUrl: 'views/view2', controller: 'SecondCtrl' })
-            .otherwise({ redirectTo: '/view1' });
+            .when('/', { templateUrl: 'views/homeview', controller: 'homeController' })
+            .when('/view2', { templateUrl: 'views/view2', controller: 'secondCtrl' })
+            .when('/login', { templateUrl: 'views/loginview', controller: 'loginCtrl' })
+            .otherwise({ redirectTo: '/' });
     }]);
