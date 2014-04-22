@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Paint With Friends";
+}
+
+@section head
+{
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
+    <script src="~/Scripts/jquery.signalR-2.0.1.js" type="text/javascript"></script>
+    <script src="~/Scripts/knockout-3.0.0.js" type="text/javascript"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/jquery.hammer.js" type="text/javascript"></script>
+    <script src="~/Scripts/index.js" type="text/javascript"></script>
+}
+
+<div class="row top-row">
+    <div class="medium-8 columns">
+        <div >
+            <div class="border-image">
+                <img src="~/content/images/frame-bg-1200.jpg" />
+            </div>
+            <div id="canvasDiv" class="canvas-container" style="position:absolute;">
+                <canvas id="canvas" style="position:relative;"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="medium-4 columns">
+        <div class="panel medium-12 columns">
+            <h4>Players</h4>
+            <ul data-bind="foreach: players">
+                <li>
+                    <span data-bind="text: Name"></span>
+                    <img src="~/content/images/brush.png" alt="isDrawer" data-bind="visible: IsDrawer" />
+                </li>
+            </ul>
+        </div>
+
+        <div class="join-container medium-12 columns">
+            <form data-bind="submit: joinGame, visible: isPlayerJoined">
+                <div class="small-8 columns">
+                    <input id="playerName" type="text" data-bind="value: playerName" placeholder="Name" />
+                </div>
+                <div class="small-4 columns">
+                    <input type="submit" value="join" data-bind="click: joinGame, enable: isConnected" class="small button" />
+                </div>
+            </form>
+
+            <p data-bind="hidden: isPlayerJoined">Welcome <span data-bind="text: playerName"></span></p>
+
+            <p data-bind="visible: match().length > 0">Your word is : <span data-bind="text: match"></span></p>
+        </div>
+
+        <div class="small-12 columns">
+            <input type="button" value="start" data-bind="click: startGame, visible: isDrawer, enable: isReady" class="large button small-12 columns" />     
+
+            <input type="button" value="clear" data-bind="click: clearCanvas, visible: isDrawer, enable: isPlaying" class="small secondary small-12 button" />
+        </div>
+    </div>
+</div>
+
+<div class="row container-bottom">
+
+    <div class="small-12 columns">
+        <div id="chatDiv" style="overflow: auto; border: 1px gray solid; height:190px;">
+            <ul data-bind="foreach: chats" style="list-style-type: circle;">
+                <li>
+                    <span data-bind="text: PlayerName"></span>: 
+                <span data-bind="text: Message"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="small-12 columns"><span>&nbsp;</span></div>
+
+    <form data-bind="submit: submitChat, enable: player() != null">
+
+        <div class="small-4 columns">
+            <input type="text" id="chatBox" data-bind="value: chat" />
+        </div>
+
+        <div class="small-8 columns">
+            <input type="submit" value="enter" data-bind="enable: player() != null" class="small button" />
+            <input type="button" value="guess" data-bind="click: guessValue, enable: isPlaying" class="small button" />
+        </div>
+
+    </form>
+
+</div>
