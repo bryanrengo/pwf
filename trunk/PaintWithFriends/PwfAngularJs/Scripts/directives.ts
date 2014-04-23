@@ -42,13 +42,9 @@ angular.module('app.directives', [])
             };
 
             element.bind('mousedown', function (event) {
-                if (event.offsetX !== undefined) {
-                    lastX = event.offsetX;
-                    lastY = event.offsetY;
-                } else {
-                    lastX = event.layerX - event.currentTarget.offsetLeft;
-                    lastY = event.layerY - event.currentTarget.offsetTop;
-                }
+                var position = getCoords(event, canvas);
+                lastX = position.x;
+                lastY = position.y;
 
                 // begins new line
                 ctx.beginPath();
@@ -61,13 +57,9 @@ angular.module('app.directives', [])
 
                 if (drawing) {
                     // get current mouse position
-                    if (event.offsetX !== undefined) {
-                        currentX = event.offsetX;
-                        currentY = event.offsetY;
-                    } else {
-                        currentX = event.layerX - event.currentTarget.offsetLeft;
-                        currentY = event.layerY - event.currentTarget.offsetTop;
-                    }
+                    var position = getCoords(event, canvas);
+                    currentX = position.x;
+                    currentY = position.y;
 
                     draw(lastX, lastY, currentX, currentY);
 
@@ -99,6 +91,23 @@ angular.module('app.directives', [])
                 ctx.strokeStyle = "#4bf";
                 // draw it
                 ctx.stroke();
+            }
+
+            // Get the coordinates crossbrowser for a mouse or touch event
+            function getCoords(e, canvas) {
+                if (e.offsetX) {
+                    // Works in Chrome / Safari (except on iPad/iPhone)
+                    return { x: e.offsetX, y: e.offsetY };
+                }
+                else if (e.layerX) {
+                    // Works in Firefox
+                    return { x: e.layerX, y: e.layerY };
+                }
+                else {
+                    // Works in Safari on iPad/iPhone
+                    var pos = findPos(canvas);
+                    return { x: e.pageX - pos.left, y: e.pageY - pos.top };
+                }
             }
 
             function findPos(elem) {

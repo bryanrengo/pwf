@@ -34,11 +34,12 @@ angular.module('app.services', [])
 
             proxy.on('requiredToFunction', function () { });
 
-            connection.start(startOptions).done(function () { console.log('started'); });
+            connection.start(startOptions)
+                .done(function () { console.log('started'); });
+                
 
             var proxyConnection = {
                 on: function (eventName, callback) {
-
                     proxy.on(eventName, function (result) {
                         $rootScope.$apply(function () {
                             if (callback) {
