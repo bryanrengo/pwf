@@ -24,4 +24,18 @@
 .active {
   font-weight: bold;
 }
+.canvas-container {
+  position: absolute;
+  -ms-touch-action: none;
+  border: 1px dashed black;
+  height: 600px;
+  width: 800px;
+}
+.canvas-container > canvas {
+  position: relative;
+}
+.beat {
+  height: 18px;
+  width: 18px;
+}
 /*# sourceMappingURL=app.css.map */

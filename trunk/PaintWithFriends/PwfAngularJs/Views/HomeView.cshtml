@@ -1,4 +1,10 @@
 ﻿<div>
     <h2>Welcome</h2>
-    
+    <div ng-controller="gameBoardController">
+        <div id="canvasDiv" class="canvas-container">
+            <drawing />
+            <span style="left:20px; bottom:25px; position:absolute;">X: {{position.left}}px</span>
+            <span style="left:20px; bottom:10px; position:absolute;">Y: {{position.top}}px</span>
+        </div>
+    </div>
 </div>

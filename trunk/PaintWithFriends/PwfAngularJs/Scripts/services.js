@@ -2,7 +2,7 @@
 /// Services
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="_references.ts" />
-
+// Demonstrate how to register services. In this case it is a simple value service.
 angular.module('app.services', []).value('version', '0.1').factory('authInterceptor', function ($window, $q) {
     return {
         request: function (config) {
@@ -23,12 +23,19 @@ angular.module('app.services', []).value('version', '0.1').factory('authIntercep
     '$', '$rootScope', function ($, $rootScope) {
         function signalRProxyFactory(hubName, startOptions) {
             // slightly modified http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
+            $.connection.hub.logging = true;
             var connection = $.hubConnection();
+            connection.logging = true;
             var proxy = connection.createHubProxy(hubName);
-            connection.start(startOptions).done(function () {
+
+            proxy.on('requiredToFunction', function () {
             });
 
-            return {
+            connection.start(startOptions).done(function () {
+                console.log('started');
+            });
+
+            var proxyConnection = {
                 on: function (eventName, callback) {
                     proxy.on(eventName, function (result) {
                         $rootScope.$apply(function () {
@@ -47,8 +54,8 @@ angular.module('app.services', []).value('version', '0.1').factory('authIntercep
                         });
                     });
                 },
-                invoke: function (methodName, callback) {
-                    proxy.invoke(methodName).done(function (result) {
+                invoke: function (methodName, callback, arg) {
+                    proxy.invoke(methodName, arg).done(function (result) {
                         $rootScope.$apply(function () {
                             if (callback) {
                                 callback(result);
@@ -58,7 +65,10 @@ angular.module('app.services', []).value('version', '0.1').factory('authIntercep
                 },
                 connection: connection
             };
+
+            return proxyConnection;
         }
 
         return signalRProxyFactory;
     }]);
+//# sourceMappingURL=services.js.map

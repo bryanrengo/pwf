@@ -9,3 +9,4 @@ angular.module('app', ['app.filters', 'app.services', 'app.directives', 'app.con
         $locationProvider.html5Mode(true);
         $routeProvider.when('/', { templateUrl: 'views/homeview', controller: 'homeController' }).when('/view2', { templateUrl: 'views/view2', controller: 'secondCtrl' }).when('/login', { templateUrl: 'views/loginview', controller: 'loginCtrl' }).otherwise({ redirectTo: '/' });
     }]);
+//# sourceMappingURL=app.js.map
