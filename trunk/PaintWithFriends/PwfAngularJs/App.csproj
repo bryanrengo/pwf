@@ -453,9 +453,6 @@
     <Content Include="Scripts\_references.js">
       <DependentUpon>_references.ts</DependentUpon>
     </Content>
-    <Content Include="Scripts\_references.min.js">
-      <DependentUpon>_references.ts</DependentUpon>
-    </Content>
     <Content Include="Styles\app.css">
       <DependentUpon>app.less</DependentUpon>
     </Content>
