@@ -155,3 +155,8 @@ $RECYCLE.BIN/
 *.LOCAL.*
 *.REMOTE.*
 
+/trunk/PaintWithFriends/MiniIRC
+/trunk/PaintWithFriends/MultiDraw
+/trunk/PaintWithFriends/PaintWithFriends
+/trunk/PaintWithFriends/PaintWithSignon
+/trunk/PaintWithFriends/PwfAngular/Scripts/directives
