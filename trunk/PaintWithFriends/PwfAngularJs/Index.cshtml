@@ -1,11 +1,10 @@
 ﻿@using System.Web.Optimization
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en" ng-app="pwfApp">
 <head>
     <meta charset="utf-8">
     <title>AngularJS App</title>
     @Styles.Render("~/css/app")
-    @Styles.Render("~/css/bootstrap")
 </head>
 <body class="container">
     <nav class="navbar navbar-default" role="navigation" ng-controller="navController">
@@ -40,11 +39,7 @@
 
     @Scripts.RenderFormat(
         "<script src=\"{0}\"></script>",
-            "~/js/jquery",
-            "~/js/bootstrap",
-            "~/js/signalr",
-            "~/js/angular",
-            "~/signalr/hubs",
+            "~/js/libs",
             "~/js/app")
 </body>
 </html>

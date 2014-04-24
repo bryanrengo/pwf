@@ -1,7 +1,7 @@
-/// <reference path="angular/angular-cookies.d.ts"/>
-/// <reference path="angular/angular-resource.d.ts"/>
-/// <reference path="angular/angular-route.d.ts"/>
-/// <reference path="angular/angular-cookies.d.ts"/>
-/// <reference path="angular/angular-sanitize.d.ts"/>
-/// <reference path="angular/angular.d.ts"/>
-/// <reference path="jquery/jquery.d.ts"/>
+/// <reference path="angular-cookies.d.ts"/>
+/// <reference path="angular-resource.d.ts"/>
+/// <reference path="angular-route.d.ts"/>
+/// <reference path="angular-cookies.d.ts"/>
+/// <reference path="angular-sanitize.d.ts"/>
+/// <reference path="angular.d.ts"/>
+/// <reference path="jquery.d.ts"/>

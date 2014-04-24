@@ -13,30 +13,22 @@ namespace App
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new Bundle("~/js/angular").Include(
-                "~/scripts/angular/angular.js",
-                "~/scripts/angular/angular-route.js"));
+            bundles.Add(new Bundle("~/js/libs").Include(
+                "~/scripts/angular.js",
+                "~/scripts/angular-route.js",
+                "~/scripts/jquery-{version}.js",
+                "~/scripts/bootstrap.js",
+                "~/scripts/jquery.signalr-{version}.js"));
 
-            bundles.Add(new Bundle("~/js/jquery").Include(
-                "~/scripts/jquery/jquery-{version}.js"));
-
-            bundles.Add(new Bundle("~/js/bootstrap").Include(
-                "~/scripts/bootstrap/bootstrap.js"));
-
-            bundles.Add(new Bundle("~/js/signalr").Include(
-                "~/scripts/signalr/jquery.signalr-{version}.js"));
-
-            bundles.Add(new Bundle("~/js/app").Include(
-                "~/scripts/app.js",
-                "~/scripts/filters.js",
-                "~/scripts/services.js",
-                "~/scripts/directives.js",
-                "~/scripts/controllers.js"));
+            bundles.Add(new Bundle("~/js/app")
+                .IncludeDirectory(directoryVirtualPath: "~/app", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/common", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/chat", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/gameboard", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/login", searchPattern: "*.js"));
 
             bundles.Add(new Bundle("~/css/app").Include(
-                "~/styles/app.css"));
-
-            bundles.Add(new Bundle("~/css/bootstrap").Include(
+                "~/styles/app.css",
                 "~/styles/bootstrap.css"));
         }
     }
