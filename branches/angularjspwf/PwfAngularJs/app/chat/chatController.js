@@ -1,4 +1,5 @@
-﻿(function () {
+﻿/// <reference path="../../scripts/_references.ts" />
+(function () {
     'use strict';
 
     var controllerId = 'chatController';

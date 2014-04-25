@@ -1,4 +1,4 @@
-///
+﻿///
 /// Directives
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="../../scripts/_references.ts" />
@@ -7,17 +7,18 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
         return function (scope, elm, attrs) {
             elm.text(version);
         };
-    }]).directive("drawing", function () {
+    }]).directive("drawing", function ($window) {
     return {
         restrict: "E",
         replace: 'true',
         template: '<canvas></canvas>',
         link: function (scope, element) {
+            // resize the canvas element to fill the parent container
+            resize(element);
+
+            // get reference to the canvas element and drawing context
             var canvas = element[0];
             var ctx = canvas.getContext('2d');
-            var parentDiv = element.parent()[0];
-            canvas.width = parentDiv.scrollWidth;
-            canvas.height = parentDiv.scrollHeight;
 
             // variable that decides if something should be drawn on mousemove
             var drawing = false;
@@ -27,8 +28,7 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
             var lastY;
 
             scope.drawPosition = function (data) {
-                console.log('draw position fired', data.left, data.top);
-
+                //console.log('draw position fired', data.left, data.top);
                 if (lastX && lastY) {
                     ctx.beginPath();
 
@@ -49,6 +49,7 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
 
                 drawing = true;
             });
+
             element.bind('mousemove', function (event) {
                 var currentX;
                 var currentY;
@@ -70,9 +71,16 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
                     lastY = currentY;
                 }
             });
+
             element.bind('mouseup', function (event) {
                 // stop drawing
                 drawing = false;
+            });
+
+            // window resize causes canvas to resize if necessary
+            var window = angular.element($window);
+            window.bind('resize', function () {
+                resize(element);
             });
 
             // canvas reset
@@ -121,6 +129,13 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
 
                     return { left: curleft, top: curtop };
                 }
+            }
+
+            function resize(elem) {
+                var canvas = elem[0];
+                var parentDiv = elem.parent()[0];
+                canvas.width = parentDiv.clientWidth;
+                canvas.height = parentDiv.clientHeight;
             }
         }
     };

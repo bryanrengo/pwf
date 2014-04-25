@@ -1,21 +1,27 @@
-﻿(function () {
+﻿/// <reference path="../../scripts/_references.ts" />
+
+(function () {
     'use strict';
 
     var controllerId = 'gameboardController';
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', 'signalRHubProxy', gameboardController]);
+    angular.module('pwfApp').controller(controllerId, ['$scope', 'Hub', gameboardController]);
 
-    function gameboardController($scope, signalRHubProxy) {
+    function gameboardController($scope, Hub) {
         var vm = this;
-        var clientPushHub = signalRHubProxy('gameHub');
 
-        // need to use $scope here because of the communication between directive
+        var hub = new Hub('gameHub', {
+            'drawPoint': drawPoint
+        },
+            //Server method stubs for ease of access
+            ['setPosition']
+            );
+
         $scope.setPosition = setPosition;
-        clientPushHub.on('drawPoint', drawPoint);
 
         function setPosition(position) {
             $scope.position = position;
-            clientPushHub.invoke('setPosition', function () { }, position);
+            hub.setPosition(position);
         }
 
         function drawPoint(data) {

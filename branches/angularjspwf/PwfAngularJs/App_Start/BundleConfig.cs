@@ -18,13 +18,15 @@ namespace App
                 "~/scripts/angular-route.js",
                 "~/scripts/jquery-{version}.js",
                 "~/scripts/bootstrap.js",
-                "~/scripts/jquery.signalr-{version}.js"));
+                "~/scripts/jquery.signalr-{version}.js",
+                "~/scripts/angular-signalr-hub.js"));
 
             bundles.Add(new Bundle("~/js/app")
                 .IncludeDirectory(directoryVirtualPath: "~/app", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/common", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/chat", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/gameboard", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/main", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/login", searchPattern: "*.js"));
 
             bundles.Add(new Bundle("~/css/app").Include(

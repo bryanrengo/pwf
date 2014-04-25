@@ -24,7 +24,8 @@ namespace App
             //HACK: for all other clients, not drawing.  
             position.isDrawing = false;
 
-            Clients.AllExcept(Context.ConnectionId).drawPoint(position);
+            Clients.All.drawPoint(position);
+            //Clients.AllExcept(Context.ConnectionId).drawPoint(position);
         }
 
         public void PushSegmentArray(segment[] segments)
