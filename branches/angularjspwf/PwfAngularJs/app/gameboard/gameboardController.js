@@ -16,6 +16,7 @@
             'sendSegments'
         ]);
 
+        // this function fires every 50 milliseconds
         $interval(function () {
             if ($scope.segments.length > 0) {
                 hub.sendSegments($scope.segments);
@@ -23,8 +24,11 @@
             }
         }, 50);
 
+        // this function will fire when the server sends segments
         function drawSegments(segments) {
             $scope.drawSegments(segments);
+            $scope.segmentHistory = $scope.segmentHistory.concat(segments);
+            $scope.segments = [];
         }
 
         return vm;

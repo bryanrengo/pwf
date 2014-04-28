@@ -31,16 +31,21 @@ angular.module('pwfApp.directives', [])
                 var lastY;
 
                 scope.segments = [];
-                
+                scope.segmentHistory = [];
+
                 // this function will draw each segment that comes from that argument
                 scope.drawSegments = function (segments) {
                     for (var i = 0; i < segments.length; i++) {
-                        ctx.lineWidth = "1.0";
-                        ctx.beginPath();
-                        ctx.moveTo((segments[i].xFrom / 1000) * canvas.width, (segments[i].yFrom / 1000) * canvas.height);
-                        ctx.lineTo((segments[i].xTo / 1000) * canvas.width, (segments[i].yTo / 1000) * canvas.height);
-                        ctx.strokeStyle = strokeStyle;
-                        ctx.stroke();
+                        var segment = segments[i];
+
+                        if (segment) {
+                            ctx.lineWidth = "1.0";
+                            ctx.beginPath();
+                            ctx.moveTo((segment.xFrom / 1000) * canvas.width, (segment.yFrom / 1000) * canvas.height);
+                            ctx.lineTo((segment.xTo / 1000) * canvas.width, (segment.yTo / 1000) * canvas.height);
+                            ctx.strokeStyle = strokeStyle;
+                            ctx.stroke();
+                        }
                     }
                 }
 
@@ -79,9 +84,9 @@ angular.module('pwfApp.directives', [])
                 });
 
                 // window resize causes canvas to resize if necessary
-                var window = angular.element($window);
-                window.bind('resize', function () {
+                angular.element($window).bind('resize', function () {
                     resize(element);
+                    scope.drawSegments(scope.segmentHistory);
                 });
 
                 // canvas reset
@@ -90,12 +95,15 @@ angular.module('pwfApp.directives', [])
                 }
 
                 function addSegment(xFrom, yFrom, xTo, yTo) {
-                    scope.segments.push({
+                    var segment = {
                         xFrom: ((xFrom / canvas.width) * 1000 | 0),
                         yFrom: ((yFrom / canvas.height) * 1000 | 0),
                         xTo: ((xTo / canvas.width) * 1000 | 0),
                         yTo: ((yTo / canvas.height) * 1000 | 0)
-                    });
+                    };
+
+                    scope.segments.push(segment);
+                    scope.segmentHistory.push(segment);
                 }
 
                 function draw(lX, lY, cX, cY) {
