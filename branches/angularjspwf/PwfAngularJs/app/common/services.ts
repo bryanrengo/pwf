@@ -22,56 +22,56 @@ angular.module('pwfApp.services', [])
                 return response || $q.when(response);
             }
         };
-    })
-    .value('$', $)
-    .factory('signalRHubProxy', ['$', '$rootScope', function ($, $rootScope) {
-        function signalRProxyFactory(hubName, startOptions) {
-            // slightly modified http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
-            //$.connection.hub.logging = true;
-            var connection = $.hubConnection();
-            //connection.logging = true;
-            var proxy = connection.createHubProxy(hubName);
+    });
+    //.value('$', $)
+    //.factory('signalRHubProxy', ['$', '$rootScope', function ($, $rootScope) {
+    //    function signalRProxyFactory(hubName, startOptions) {
+    //        // slightly modified http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
+    //        //$.connection.hub.logging = true;
+    //        var connection = $.hubConnection();
+    //        //connection.logging = true;
+    //        var proxy = connection.createHubProxy(hubName);
 
-            proxy.on('requiredToFunction', function () { });
+    //        proxy.on('requiredToFunction', function () { });
 
-            connection.start(startOptions)
-                .done(function () { console.log('started'); });
+    //        connection.start(startOptions)
+    //            .done(function () { console.log('started'); });
 
 
-            var proxyConnection = {
-                on: function (eventName, callback) {
-                    proxy.on(eventName, function (result) {
-                        $rootScope.$apply(function () {
-                            if (callback) {
-                                callback(result);
-                            }
-                        });
-                    });
-                },
-                off: function (eventName, callback) {
-                    proxy.off(eventName, function (result) {
-                        $rootScope.$apply(function () {
-                            if (callback) {
-                                callback(result);
-                            }
-                        });
-                    });
-                },
-                invoke: function (methodName, callback, arg) {
-                    proxy.invoke(methodName, arg)
-                        .done(function (result) {
-                            $rootScope.$apply(function () {
-                                if (callback) {
-                                    callback(result);
-                                }
-                            });
-                        });
-                },
-                connection: connection
-            };
+    //        var proxyConnection = {
+    //            on: function (eventName, callback) {
+    //                proxy.on(eventName, function (result) {
+    //                    $rootScope.$apply(function () {
+    //                        if (callback) {
+    //                            callback(result);
+    //                        }
+    //                    });
+    //                });
+    //            },
+    //            off: function (eventName, callback) {
+    //                proxy.off(eventName, function (result) {
+    //                    $rootScope.$apply(function () {
+    //                        if (callback) {
+    //                            callback(result);
+    //                        }
+    //                    });
+    //                });
+    //            },
+    //            invoke: function (methodName, callback, arg) {
+    //                proxy.invoke(methodName, arg)
+    //                    .done(function (result) {
+    //                        $rootScope.$apply(function () {
+    //                            if (callback) {
+    //                                callback(result);
+    //                            }
+    //                        });
+    //                    });
+    //            },
+    //            connection: connection
+    //        };
 
-            return proxyConnection;
-        }
+    //        return proxyConnection;
+    //    }
 
-        return signalRProxyFactory;
-    }]);
+    //    return signalRProxyFactory;
+    //}]);

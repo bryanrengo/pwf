@@ -4,27 +4,27 @@
 
     var controllerId = 'gameboardController';
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', 'Hub', gameboardController]);
+    angular.module('pwfApp').controller(controllerId, ['$scope', '$timeout', '$interval', 'Hub', gameboardController]);
 
-    function gameboardController($scope, Hub) {
+    function gameboardController($scope, $timeout, $interval, Hub) {
         var vm = this;
 
-        var hub = new Hub('gameHub', {
-            'drawPoint': drawPoint
-        }, ['setPosition']);
+        var hub = new Hub('gameHub', // client methods
+        {
+            'drawSegments': drawSegments
+        }, [
+            'sendSegments'
+        ]);
 
-        $scope.setPosition = setPosition;
+        $interval(function () {
+            if ($scope.segments.length > 0) {
+                hub.sendSegments($scope.segments);
+                $scope.segments = [];
+            }
+        }, 50);
 
-        function setPosition(position) {
-            $scope.position = position;
-            hub.setPosition(position);
-        }
-
-        function drawPoint(data) {
-            $scope.position = data;
-
-            // need to use $scope here because of the communication between directive
-            $scope.drawPosition(data);
+        function drawSegments(segments) {
+            $scope.drawSegments(segments);
         }
 
         return vm;

@@ -1,4 +1,4 @@
-﻿///
+///
 /// Directives
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="../../scripts/_references.ts" />
@@ -19,6 +19,7 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
             // get reference to the canvas element and drawing context
             var canvas = element[0];
             var ctx = canvas.getContext('2d');
+            var strokeStyle = "#4bf";
 
             // variable that decides if something should be drawn on mousemove
             var drawing = false;
@@ -27,16 +28,18 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
             var lastX;
             var lastY;
 
-            scope.drawPosition = function (data) {
-                //console.log('draw position fired', data.left, data.top);
-                if (lastX && lastY) {
+            scope.segments.length = 0;
+
+            // this function will draw each segment that comes from that argument
+            scope.drawSegments = function (segments) {
+                for (var i = 0; i < segments.length; i++) {
+                    ctx.lineWidth = "1.0";
                     ctx.beginPath();
-
-                    draw(lastX, lastY, data.left, data.top);
+                    ctx.moveTo((segments[i].xFrom / 1000) * canvas.width, (segments[i].yFrom / 1000) * canvas.height);
+                    ctx.lineTo((segments[i].xTo / 1000) * canvas.width, (segments[i].yTo / 1000) * canvas.height);
+                    ctx.strokeStyle = strokeStyle;
+                    ctx.stroke();
                 }
-
-                lastX = data.left;
-                lastY = data.top;
             };
 
             element.bind('mousedown', function (event) {
@@ -62,10 +65,6 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
 
                     draw(lastX, lastY, currentX, currentY);
 
-                    scope.$apply(function () {
-                        scope.setPosition({ isDrawing: true, left: currentX, top: currentY });
-                    });
-
                     // set current coordinates to last one
                     lastX = currentX;
                     lastY = currentY;
@@ -88,6 +87,15 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
                 element[0].width = element[0].width;
             }
 
+            function addSegment(xFrom, yFrom, xTo, yTo) {
+                scope.segments.push({
+                    xFrom: ((xFrom / canvas.width) * 1000 | 0),
+                    yFrom: ((yFrom / canvas.height) * 1000 | 0),
+                    xTo: ((xTo / canvas.width) * 1000 | 0),
+                    yTo: ((yTo / canvas.height) * 1000 | 0)
+                });
+            }
+
             function draw(lX, lY, cX, cY) {
                 // line from
                 ctx.moveTo(lX, lY);
@@ -96,10 +104,13 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
                 ctx.lineTo(cX, cY);
 
                 // color
-                ctx.strokeStyle = "#4bf";
+                ctx.strokeStyle = strokeStyle;
 
                 // draw it
                 ctx.stroke();
+
+                // add the segment to the array
+                addSegment(lX, lY, cX, cY);
             }
 
             // Get the coordinates crossbrowser for a mouse or touch event
