@@ -28,7 +28,7 @@ angular.module('pwfApp.directives', []).directive('appVersion', [
             var lastX;
             var lastY;
 
-            scope.segments.length = 0;
+            scope.segments = [];
 
             // this function will draw each segment that comes from that argument
             scope.drawSegments = function (segments) {
