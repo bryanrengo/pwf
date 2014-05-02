@@ -15,5 +15,20 @@ namespace App
         {
             Clients.AllExcept(Context.ConnectionId).drawSegments(segments);
         }
+
+        public Player Join(string playerName)
+        {
+            return GameState.Instance.GetOrAddPlayer(Context.ConnectionId, playerName);
+        }
+
+        public IEnumerable<Game> GetGames()
+        {
+            return GameState.Instance.GetAllGames();
+        }
+
+        public IEnumerable<Player> GetGamePlayers(string gameId)
+        {
+            return GameState.Instance.GetOrCreateGame(gameId).Players;
+        }
     }
 }

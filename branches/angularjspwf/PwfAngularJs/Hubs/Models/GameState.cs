@@ -12,42 +12,39 @@ namespace App.Hubs.Models
     {
         private static readonly Lazy<GameState> lazy = new Lazy<GameState>(() => new GameState(GlobalHost.ConnectionManager.GetHubContext<GameHub>()));
         private static readonly ConcurrentDictionary<string, Game> games = new ConcurrentDictionary<string, Game>();
+        private static readonly ConcurrentDictionary<string, Player> players = new ConcurrentDictionary<string, Player>();
+        private readonly IGroupManager groups;
+        private readonly IHubContext hubContext;
 
         private GameState(IHubContext context)
         {
-            Groups = context.Groups;
+            groups = context.Groups;
+            hubContext = context;
         }
 
-        public static GameState Instance
-        {
-            get
-            {
-                return lazy.Value;
-            }
-        }
+        public static GameState Instance { get { return lazy.Value; } }
 
-        public IGroupManager Groups { get; set; }
+        public IGroupManager Groups { get { return groups; } }
+
+        public IHubContext HubContext { get { return hubContext; } }
 
         public Game GetGame(Player player)
         {
             return games.Values.FirstOrDefault(g => g.Players.Any(p => p.Id == player.Id));
         }
 
-        public Player GetPlayer(string playerConnectionId)
+        public Game GetOrCreateGame(string gameId)
         {
-            return (from game in games.Values
-                    from player in game.Players
-                    where player.Id == playerConnectionId
-                    select player).FirstOrDefault();
-        }
+            Game retGame = games.GetOrAdd(gameId, new Game() { GameId = gameId });
 
-        public IEnumerable<Player> GetAllPlayers()
-        {
-            return games.SelectMany(p => p.Value.Players);
+            return retGame;
         }
 
         public IEnumerable<Game> GetAllGames()
         {
+            games.AddOrUpdate("test", new Game() { GameId = "test", GameInstanceName = "test name" }, (id, game) => game);
+            games.AddOrUpdate("test1", new Game() { GameId = "test1", GameInstanceName = "test1 name" }, (id, game) => game);
+
             return games.Values;
         }
 
@@ -58,20 +55,19 @@ namespace App.Hubs.Models
             games.TryRemove(game.GameId, out removedGame);
         }
 
-        public Player CreatePlayer(string playerName, string connectionId)
+        public Player GetOrAddPlayer(string playerConnectionId, string playerName)
         {
-            return new Player()
+            Player retPlayer = null;
+
+            players.TryGetValue(playerConnectionId, out retPlayer);
+
+            if (retPlayer == null)
             {
-                Id = connectionId,
-                Name = playerName
-            };
-        }
+                retPlayer = players.AddOrUpdate(playerConnectionId, new Player() { Id = playerConnectionId, Name = playerName }, (id, player) => player);
+            }
 
-        public void RemovePlayer(Player player)
-        {
-            Game removePlayerGame = this.GetGame(player);
-
-            removePlayerGame.RemovePlayer(player);
+            // if not, create and add
+            return retPlayer;
         }
     }
 }

@@ -27,7 +27,8 @@ namespace App
                 .IncludeDirectory(directoryVirtualPath: "~/app/chat", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/gameboard", searchPattern: "*.js")
                 .IncludeDirectory(directoryVirtualPath: "~/app/main", searchPattern: "*.js")
-                .IncludeDirectory(directoryVirtualPath: "~/app/login", searchPattern: "*.js"));
+                .IncludeDirectory(directoryVirtualPath: "~/app/login", searchPattern: "*.js")
+                .IncludeDirectory(directoryVirtualPath: "~/app/gameList", searchPattern: "*.js"));
 
             bundles.Add(new Bundle("~/css/app").Include(
                 "~/styles/app.css",

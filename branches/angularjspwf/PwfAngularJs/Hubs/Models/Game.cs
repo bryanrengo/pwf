@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,22 @@ namespace App.Hubs.Models
         private List<Player> players = new List<Player>();
         private List<segment> segments = new List<segment>();
 
-        public string GameId { get; set; }
-        public string Answer { get; set; }
-        public List<segment> Segments { get { return segments; } }
+        public Game()
+        {
+            GameInstanceName = "Game" + new Random(1);
+        }
+
         public List<Player> Players { get { return players; } }
+
+        public string GameId { get; set; }
+
+        public string GameInstanceName { get; set; }
+
+        [JsonIgnore]
+        public string Answer { get; set; }
+        
+        [JsonIgnore]
+        public List<segment> Segments { get { return segments; } }
 
         public Player GetPlayer(string playerConnectionId)
         {

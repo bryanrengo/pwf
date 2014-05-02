@@ -10,13 +10,15 @@ namespace App.Hubs.Models
 {
     public interface IGameState
     {
-        IGroupManager Groups { get; set; }
+        IGroupManager Groups { get; }
+        IHubContext HubContext { get; }
+
         Game GetGame(Player player);
-        Player GetPlayer(string playerConnectionId);
-        Player CreatePlayer(string playerName, string connectionId);
-        IEnumerable<Player> GetAllPlayers();
+        Game GetOrCreateGame(string gameId);
+
         IEnumerable<Game> GetAllGames();        
         void RemoveGame(Game game);
-        void RemovePlayer(Player player);
+
+        Player GetOrAddPlayer(string playerConnectionId, string playerName);
     }
 }
