@@ -4,12 +4,7 @@
 /// <reference path="../../scripts/_references.ts" />
 
 angular.module('pwfApp.directives', [])
-    .directive('appVersion', [<any> 'version', function (version) {
-        return function (scope, elm, attrs) {
-            elm.text(version);
-        };
-    }])
-    .directive("drawing", function ($window) {
+    .directive("drawing", ['$window', 'drawingApi', function ($window, drawingApi) {
         return {
             restrict: "E",
             replace: 'true',
@@ -29,25 +24,6 @@ angular.module('pwfApp.directives', [])
                 // the last coordinates before the current move
                 var lastX;
                 var lastY;
-
-                scope.segments = [];
-                scope.segmentHistory = [];
-
-                // this function will draw each segment that comes from that argument
-                scope.drawSegments = function (segments) {
-                    for (var i = 0; i < segments.length; i++) {
-                        var segment = segments[i];
-
-                        if (segment) {
-                            ctx.lineWidth = "1.0";
-                            ctx.beginPath();
-                            ctx.moveTo((segment.xFrom / 1000) * canvas.width, (segment.yFrom / 1000) * canvas.height);
-                            ctx.lineTo((segment.xTo / 1000) * canvas.width, (segment.yTo / 1000) * canvas.height);
-                            ctx.strokeStyle = strokeStyle;
-                            ctx.stroke();
-                        }
-                    }
-                }
 
                 element.bind('mousedown', function (event) {
                     var position = getCoords(event, canvas);
@@ -86,8 +62,29 @@ angular.module('pwfApp.directives', [])
                 // window resize causes canvas to resize if necessary
                 angular.element($window).bind('resize', function () {
                     resize(element);
-                    scope.drawSegments(scope.segmentHistory);
+                    drawSegments(drawingApi.segmentHistory);
                 });
+
+                drawingApi.drawSegments(function (segments) {
+                    drawSegments(segments);
+                });
+
+                function drawSegments(segments) {
+                    if (segments) {
+                        for (var i = 0; i < segments.length; i++) {
+                            var segment = segments[i];
+
+                            if (segment) {
+                                ctx.lineWidth = "1.0";
+                                ctx.beginPath();
+                                ctx.moveTo((segment.xFrom / 1000) * canvas.width, (segment.yFrom / 1000) * canvas.height);
+                                ctx.lineTo((segment.xTo / 1000) * canvas.width, (segment.yTo / 1000) * canvas.height);
+                                ctx.strokeStyle = strokeStyle;
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                }
 
                 // canvas reset
                 function reset() {
@@ -102,8 +99,8 @@ angular.module('pwfApp.directives', [])
                         yTo: ((yTo / canvas.height) * 1000 | 0)
                     };
 
-                    scope.segments.push(segment);
-                    scope.segmentHistory.push(segment);
+                    drawingApi.segments.push(segment);
+                    drawingApi.segmentHistory.push(segment);
                 }
 
                 function draw(lX, lY, cX, cY) {
@@ -158,5 +155,5 @@ angular.module('pwfApp.directives', [])
                 }
             }
         };
-    });
+    }]);
 

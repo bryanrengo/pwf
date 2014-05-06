@@ -18,8 +18,7 @@ namespace App
                 "~/scripts/angular-route.js",
                 "~/scripts/jquery-{version}.js",
                 "~/scripts/bootstrap.js",
-                "~/scripts/jquery.signalr-{version}.js",
-                "~/scripts/angular-signalr-hub.js"));
+                "~/scripts/jquery.signalr-{version}.js"));
 
             bundles.Add(new Bundle("~/js/app")
                 .IncludeDirectory(directoryVirtualPath: "~/app", searchPattern: "*.js")

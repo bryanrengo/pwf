@@ -165,8 +165,6 @@
     <Content Include="app\navController.js">
       <DependentUpon>navController.ts</DependentUpon>
     </Content>
-    <Content Include="Scripts\angular-signalr-hub.js" />
-    <Content Include="Scripts\angular-signalr-hub.min.js" />
     <Content Include="app\gameList\gameListView.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />

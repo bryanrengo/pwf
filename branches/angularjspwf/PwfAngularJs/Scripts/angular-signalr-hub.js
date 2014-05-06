@@ -1,46 +1,65 @@
 angular.module('SignalR', [])
 .constant('$', $)
 .factory('Hub', ['$', '$q', function ($, $q) {
-    return function (hubName, listeners, methods) {
-        var deferred = $q.defer();
+    return function (hubName) {
 
         var Hub = this;
+        Hub.isConnected = false;
         Hub.connection = $.hubConnection();
         Hub.connection.logging = true;
         Hub.proxy = Hub.connection.createHubProxy(hubName);
-        Hub.proxy.on('requiredToFunction', function () { });
-        Hub.connection.start()
-            .done(function () {
-                deferred.resolve(Hub);
-            })
-            .fail(function () {
-                deferred.reject(Hub);
-            });
+        // for whatever reason, the hub must have at least one subscription added before the connection.start() is called
+        Hub.proxy.on('eventForDeferredSubscription', function () { });
 
-        Hub.on = function (event, fn) {
+        Hub.connect = function () {
+            var deferred = $q.defer();
+
+            Hub.connection.start()
+                .done(function () {
+                    deferred.resolve();
+                })
+                .fail(function () {
+                    deferred.reject();
+                });
+
+            return deferred.promise;
+        }
+
+        Hub.subscribe = function (event, fn) {
             Hub.proxy.on(event, fn);
+
+            if (!Hub.connection.state != 1) {
+                Hub.connect();
+            }
         };
 
-        Hub.invoke = function (method, args) {
-            return Hub.proxy.invoke.apply(Hub.proxy, arguments)
+        Hub.execute = function (method, args, fn) {
+            if (Hub.connection.state != 1) {
+                Hub.connect()
+                    .then(function () {
+                        execute(method, args, fn);
+                    });
+            }
+            else {
+                execute(method, args, fn);
+            }
+
+            function execute(method, args, fn) {
+                if (fn && args) {
+                    Hub.proxy.invoke(method, args).done(fn);
+                }
+                else if (fn && !args) {
+                    Hub.proxy.invoke(method).done(fn);
+                }
+                else if (!fn && args) {
+                    Hub.proxy.invoke(method, args);
+                }
+                else if (!fn && !args) {
+                    Hub.proxy.invoke(method);
+                }
+            }
         };
 
-        if (listeners) {
-            angular.forEach(listeners, function (fn, event) {
-                Hub.on(event, fn);
-            });
-        }
-
-        if (methods) {
-            angular.forEach(methods, function (method) {
-                Hub[method] = function () {
-                    var args = $.makeArray(arguments);
-                    args.unshift(method);
-                    return Hub.invoke.apply(Hub, args);
-                };
-            });
-        }
-
-        return deferred.promise;
+        return Hub;
     };
 }]);

@@ -5,7 +5,7 @@
 // Demonstrate how to register services. In this case it is a simple value service.
 
 angular.module('pwfApp.services', [])
-    .value('version', '0.1')
+    .constant('$', $)
     .factory('authInterceptor', function ($window: any, $q: any) {
         return {
             request: function (config) {
@@ -22,56 +22,94 @@ angular.module('pwfApp.services', [])
                 return response || $q.when(response);
             }
         };
+    })
+    .factory('signalRHub', ['$', '$q', function ($, $q) {
+        return function (hubName) {
+
+            var Hub = this;
+            Hub.isConnected = false;
+            Hub.connection = $.hubConnection();
+            Hub.connection.logging = true;
+            Hub.proxy = Hub.connection.createHubProxy(hubName);
+            // for whatever reason, the hub must have at least one subscription added before the connection.start() is called
+            Hub.proxy.on('eventForDeferredSubscription', function () { });
+
+            Hub.connect = function () {
+                var deferred = $q.defer();
+
+                Hub.connection.start()
+                    .done(function () {
+                        deferred.resolve();
+                    })
+                    .fail(function () {
+                        deferred.reject();
+                    });
+
+                return deferred.promise;
+            }
+
+            Hub.subscribe = function (event, fn) {
+                Hub.proxy.on(event, fn);
+
+                if (Hub.connection.state != 1) {
+                    Hub.connect();
+                }
+            };
+
+            Hub.execute = function (method, args, fn) {
+                if (Hub.connection.state != 1) {
+                    Hub.connect()
+                        .then(function () {
+                            execute(method, args, fn);
+                        });
+                }
+                else {
+                    execute(method, args, fn);
+                }
+
+                function execute(method, args, fn) {
+                    if (fn && args) {
+                        Hub.proxy.invoke(method, args).done(fn);
+                    }
+                    else if (fn && !args) {
+                        Hub.proxy.invoke(method).done(fn);
+                    }
+                    else if (!fn && args) {
+                        Hub.proxy.invoke(method, args);
+                    }
+                    else if (!fn && !args) {
+                        Hub.proxy.invoke(method);
+                    }
+                }
+            };
+
+            return Hub;
+        };
+    }])
+    .service('gameHubFactory', ['signalRHub', function (signalRHub) {
+        return new signalRHub('gameHub');
+    }])
+    .factory('drawingApi', function () {
+        var callback;
+        var segments = [];
+        var segmentHistory = [];
+
+        function drawSegments(callback) {
+            this.callback = callback;
+        }
+
+        function updateSegments(segments) {
+            if (this.callback) {
+                this.callback(segments);
+                this.segmentHistory = this.segmentHistory.concat(segments);
+                this.segments = [];
+            }
+        }
+
+        return {
+            segments: segments,
+            segmentHistory: segmentHistory,
+            updateSegments: updateSegments,
+            drawSegments: drawSegments
+        }
     });
-    //.value('$', $)
-    //.factory('signalRHubProxy', ['$', '$rootScope', function ($, $rootScope) {
-    //    function signalRProxyFactory(hubName, startOptions) {
-    //        // slightly modified http://henriquat.re/server-integration/signalr/integrateWithSignalRHubs.html
-    //        //$.connection.hub.logging = true;
-    //        var connection = $.hubConnection();
-    //        //connection.logging = true;
-    //        var proxy = connection.createHubProxy(hubName);
-
-    //        proxy.on('requiredToFunction', function () { });
-
-    //        connection.start(startOptions)
-    //            .done(function () { console.log('started'); });
-
-
-    //        var proxyConnection = {
-    //            on: function (eventName, callback) {
-    //                proxy.on(eventName, function (result) {
-    //                    $rootScope.$apply(function () {
-    //                        if (callback) {
-    //                            callback(result);
-    //                        }
-    //                    });
-    //                });
-    //            },
-    //            off: function (eventName, callback) {
-    //                proxy.off(eventName, function (result) {
-    //                    $rootScope.$apply(function () {
-    //                        if (callback) {
-    //                            callback(result);
-    //                        }
-    //                    });
-    //                });
-    //            },
-    //            invoke: function (methodName, callback, arg) {
-    //                proxy.invoke(methodName, arg)
-    //                    .done(function (result) {
-    //                        $rootScope.$apply(function () {
-    //                            if (callback) {
-    //                                callback(result);
-    //                            }
-    //                        });
-    //                    });
-    //            },
-    //            connection: connection
-    //        };
-
-    //        return proxyConnection;
-    //    }
-
-    //    return signalRProxyFactory;
-    //}]);

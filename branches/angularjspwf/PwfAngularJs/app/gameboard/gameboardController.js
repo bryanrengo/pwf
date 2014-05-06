@@ -4,32 +4,22 @@
 
     var controllerId = 'gameboardController';
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', '$timeout', '$interval', 'Hub', gameboardController]);
+    angular.module('pwfApp').controller(controllerId, ['$scope', '$timeout', '$interval', 'gameHubFactory', 'drawingApi', gameboardController]);
 
-    function gameboardController($scope, $timeout, $interval, Hub) {
+    function gameboardController($scope, $timeout, $interval, gameHubFactory, drawingApi) {
         var vm = this;
 
-        var hub = new Hub('gameHub', // client methods
-        {
-            'drawSegments': drawSegments
-        }, [
-            'sendSegments'
-        ]);
+        gameHubFactory.subscribe('drawSegments', function (segments) {
+            drawingApi.updateSegments(segments);
+        });
 
         // this function fires every 50 milliseconds
         $interval(function () {
-            if ($scope.segments.length > 0) {
-                hub.sendSegments($scope.segments);
-                $scope.segments = [];
+            if (drawingApi.segments && drawingApi.segments.length > 0) {
+                gameHubFactory.execute('sendSegments', drawingApi.segments);
+                drawingApi.segments = [];
             }
         }, 50);
-
-        // this function will fire when the server sends segments
-        function drawSegments(segments) {
-            $scope.drawSegments(segments);
-            $scope.segmentHistory = $scope.segmentHistory.concat(segments);
-            $scope.segments = [];
-        }
 
         return vm;
     }

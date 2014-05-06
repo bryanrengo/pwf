@@ -11,6 +11,11 @@ namespace App
 {
     public class GameHub : Hub
     {
+        public override System.Threading.Tasks.Task OnConnected()
+        {
+            return base.OnConnected();
+        }
+
         public void SendSegments(segment[] segments)
         {
             Clients.AllExcept(Context.ConnectionId).drawSegments(segments);
