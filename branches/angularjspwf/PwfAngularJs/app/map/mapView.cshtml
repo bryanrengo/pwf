@@ -1,5 +1,23 @@
 ﻿<h2>Google Maps</h2>
 
 <div class="row">
-    <google-map center="map.center" zoom="map.zoom"></google-map>
+    <google-map center="map.center"
+                zoom="map.zoom"
+                draggable="true"
+                control="map.control"
+                bounds="map.bounds">
+        <markers models="map.markers"
+                 coords="'self'">
+        </markers>
+    </google-map>
+</div>
+<div class="row">
+    <h4>Markers</h4>
+    <p>move the map around, or zoom in/out to add more markers</p>
+    <ul>
+        <li ng-repeat="marker in map.markers">
+            Latitude: {{marker.latitude}}
+            Longitude: {{marker.longitude}}
+        </li>
+    </ul>
 </div>

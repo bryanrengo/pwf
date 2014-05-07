@@ -172,6 +172,7 @@
     <Content Include="app\gameList\gameListView.cshtml" />
     <Content Include="app\map\mapView.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Images\mapmarker-noalpha.png" />
     <Content Include="Scripts\angular-google-maps.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
