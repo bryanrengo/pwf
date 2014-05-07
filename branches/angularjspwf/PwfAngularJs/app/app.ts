@@ -3,7 +3,7 @@
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="../scripts/_references.ts" />
 // Declare app level module which depends on filters, and services
-angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directives', 'ngRoute'])
+angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directives', 'ngRoute', 'google-maps', 'geolocation'])
     .config(['$locationProvider', '$routeProvider', '$httpProvider',
         function ($locationProvider, $routeProvider, $httpProvider) {
             $httpProvider.interceptors.push('authInterceptor');
@@ -14,6 +14,7 @@ angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directive
                 .when('/chat', { templateUrl: 'app/chat/chatview', controller: 'chatController' })
                 .when('/game', { templateUrl: 'app/gameboard/gameboardview', controller: 'gameboardController' })
                 .when('/list', { templateUrl: 'app/gamelist/gamelistview', controller: 'gameListController' })
+                .when('/map', { templateUrl: 'app/map/mapview', controller: 'mapController' })
                 .otherwise({ redirectTo: '/' });
 
         }]);

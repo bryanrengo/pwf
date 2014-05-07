@@ -161,16 +161,24 @@
     <Content Include="app\main\mainController.js">
       <DependentUpon>mainController.ts</DependentUpon>
     </Content>
+    <TypeScriptCompile Include="app\map\mapController.ts" />
+    <Content Include="app\map\mapController.js">
+      <DependentUpon>mapController.ts</DependentUpon>
+    </Content>
     <TypeScriptCompile Include="app\navController.ts" />
     <Content Include="app\navController.js">
       <DependentUpon>navController.ts</DependentUpon>
     </Content>
     <Content Include="app\gameList\gameListView.cshtml" />
+    <Content Include="app\map\mapView.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\angular-google-maps.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.min.js" />
+    <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Scripts\underscore.js" />
     <Content Include="Styles\bootstrap-theme.css" />
     <Content Include="Styles\bootstrap-theme.min.css" />
     <Content Include="Styles\bootstrap.css" />
@@ -524,6 +532,7 @@
       <DependentUpon>app.css</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Scripts\underscore-min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -531,9 +540,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

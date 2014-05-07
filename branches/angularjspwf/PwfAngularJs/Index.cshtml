@@ -26,6 +26,7 @@
                     <li><a ng-class="{ active: isActive('/chat') }" href="~/chat">Chat</a></li>
                     <li><a ng-class="{ active: isActive('/game') }" href="~/game">Game</a></li>
                     <li><a ng-class="{ active: isActive('/list') }" href="~/list">List</a></li>
+                    <li><a ng-class="{ active: isActive('/map') }" href="~/map">Map</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a ng-class="{ active: isActive('/login') }" href="~/login">Login</a></li>
@@ -38,9 +39,8 @@
         <div class="col-md-12" ng-view></div>
     </div>
 
-@Scripts.RenderFormat(
-    "   <script src=\"{0}\"></script>",
-        "~/js/libs",
-        "~/js/app")
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
+    @Scripts.RenderFormat("   <script src=\"{0}\"></script>", "~/js/libs", "~/js/app")
 </body>
+
 </html>

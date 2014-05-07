@@ -27,7 +27,10 @@
 .canvas-container {
   display: block;
   -ms-touch-action: none;
-  border: 1px dashed  black;
+  border: 1px dashed black;
+  height: 400px;
+}
+.angular-google-map-container {
   height: 400px;
 }
 /*# sourceMappingURL=app.css.map */
