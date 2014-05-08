@@ -175,11 +175,12 @@
     <Content Include="Images\mapmarker-noalpha.png" />
     <Content Include="Scripts\angular-google-maps.js" />
     <Content Include="Scripts\angular-google-maps.min.js" />
+    <Content Include="Scripts\geolocation.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.js" />
     <Content Include="Scripts\jquery.signalR-2.0.2.min.js" />
-    <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Scripts\underscore.min.js" />
     <Content Include="Scripts\underscore.js" />
     <Content Include="Styles\bootstrap-theme.css" />
     <Content Include="Styles\bootstrap-theme.min.css" />
@@ -534,7 +535,7 @@
       <DependentUpon>app.css</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery-1.9.1.min.map" />
-    <Content Include="Scripts\underscore-min.map" />
+    <Content Include="Scripts\underscore.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
