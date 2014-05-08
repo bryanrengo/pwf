@@ -13,17 +13,17 @@ namespace App
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.UseCdn = true;
-
             bundles.Add(new Bundle("~/js/libs").Include(
                 "~/scripts/angular.js",
                 "~/scripts/angular-route.js",
                 "~/scripts/jquery-{version}.js",
                 "~/scripts/bootstrap.js",
-                "~/scripts/jquery.signalr-{version}.js",
-                "~/scripts/underscore.js",
-                "~/scripts/angular-google-maps.js",
-                "~/scripts/geolocation.js"));
+                "~/scripts/jquery.signalr-{version}.js"
+                //,
+                //"~/scripts/underscore.js",
+                //"~/scripts/angular-google-maps.js",
+                //"~/scripts/geolocation.js"
+                ));
 
             bundles.Add(new Bundle("~/js/app")
                 .IncludeDirectory(directoryVirtualPath: "~/app", searchPattern: "*.js")
