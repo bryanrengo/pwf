@@ -18,9 +18,9 @@ namespace App
                 "~/scripts/angular-route.js",
                 "~/scripts/jquery-{version}.js",
                 "~/scripts/bootstrap.js",
-                "~/scripts/jquery.signalr-{version}.js"
+                "~/scripts/jquery.signalr-{version}.js",
+                "~/scripts/underscore.js"
                 //,
-                //"~/scripts/underscore.js",
                 //"~/scripts/angular-google-maps.js",
                 //"~/scripts/geolocation.js"
                 ));
