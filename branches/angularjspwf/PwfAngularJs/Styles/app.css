@@ -30,6 +30,12 @@
   border: 1px dashed black;
   height: 400px;
 }
+.draw {
+  cursor: pointer;
+}
+.draw:active {
+  cursor: url(/images/paintbrush.png), url(images/paintbrush.png), auto;
+}
 .angular-google-map-container {
   height: 400px;
 }

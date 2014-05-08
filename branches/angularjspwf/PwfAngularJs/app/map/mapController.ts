@@ -21,7 +21,32 @@
                     $scope.map.control.refresh(center);
                 },
                 bounds: {},
-                markers: []
+                markers: [],
+                options: {
+                    disableDefaultUI: true,
+                    styles: [
+                        {
+                            stylers: [
+                                { hue: '#890000' },
+                                { visibility: 'simplified' },
+                                { gamma: 0.5 },
+                                { weight: 0.5 }
+                            ]
+                        },
+                        {
+                            elementType: 'labels',
+                            stylers: [
+                                { visibility: 'off' }
+                            ]
+                        },
+                        {
+                            featureType: 'water',
+                            stylers: [
+                                { color: '#890000' }
+                            ]
+                        }
+                    ]
+                }
             }
         });
 
@@ -34,23 +59,30 @@
                 });
         });
 
-        $scope.$watch('map.bounds.northeast', function (oldVal, newVal) {
-            if (!newVal) return;
+        $scope.$watch('map.bounds', function (newVal, oldVal) {
+            if (!newVal.northeast && !newVal.southwest) return;
 
-            var topRight = $scope.map.bounds.northeast;
-            var bottomLeft = $scope.map.bounds.southwest;
+            var northeast = newVal.northeast;
+            var southwest = newVal.southwest;
 
-            var randLatitude = randomIntFromInterval(bottomLeft.latitude, topRight.latitude);
-            var randLongitude = randomIntFromInterval(bottomLeft.longitude, topRight.longitude);
+            var randLatitude = randomDecimalFromInterval(
+                southwest.latitude,
+                northeast.latitude);
+
+            var randLongitude = randomDecimalFromInterval(
+                northeast.longitude,
+                southwest.longitude);
+
+            //$scope.map.markers = [];
 
             $scope.map.markers.push({
                 latitude: randLatitude,
                 longitude: randLongitude
             });
-        });
+        }, true);
     }
 
-    function randomIntFromInterval(min, max) {
-        return Math.random() * (max - min + 1) + min;
+    function randomDecimalFromInterval(min, max) {
+        return Math.random() * (max - min) + min;
     }
 })();

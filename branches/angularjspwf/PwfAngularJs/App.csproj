@@ -173,6 +173,7 @@
     <Content Include="app\map\mapView.cshtml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\mapmarker-noalpha.png" />
+    <Content Include="Images\paintbrush.png" />
     <Content Include="Scripts\angular-google-maps.js" />
     <Content Include="Scripts\angular-google-maps.min.js" />
     <Content Include="Scripts\geolocation.js" />

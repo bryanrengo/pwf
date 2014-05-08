@@ -5,18 +5,25 @@
                 zoom="map.zoom"
                 draggable="true"
                 control="map.control"
-                bounds="map.bounds">
+                bounds="map.bounds"
+                options="map.options">
         <markers models="map.markers"
                  coords="'self'">
         </markers>
     </google-map>
 </div>
 <div class="row">
+    <h4>Boundary</h4>
+    South West: {{map.bounds.southwest}}<br/>
+    North East: {{map.bounds.northeast}}
+</div>
+<div class="row">
     <h4>Markers</h4>
     <p>move the map around, or zoom in/out to add more markers</p>
     <ul>
         <li ng-repeat="marker in map.markers">
-            Latitude: {{marker.latitude}}
+            
+            Latitude: {{marker.latitude}}<br/>
             Longitude: {{marker.longitude}}
         </li>
     </ul>
