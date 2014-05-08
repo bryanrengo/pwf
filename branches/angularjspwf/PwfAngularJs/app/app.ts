@@ -3,7 +3,8 @@
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="../scripts/_references.ts" />
 // Declare app level module which depends on filters, and services
-angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directives', 'ngRoute', 'google-maps', 'geolocation'])
+angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directives', 'ngRoute'])
+    //, 'google-maps', 'geolocation'])
     .config(['$locationProvider', '$routeProvider', '$httpProvider',
         function ($locationProvider, $routeProvider, $httpProvider) {
             $httpProvider.interceptors.push('authInterceptor');
