@@ -1,4 +1,4 @@
-/// 
+﻿/// 
 /// Directives
 /// -------------------------------------------------------------------------------------------------------------------
 /// <reference path="../../scripts/_references.ts" />
@@ -16,7 +16,6 @@ angular.module('pwfApp.directives', [])
                 // get reference to the canvas element and drawing context
                 var canvas = element[0];
                 var ctx = canvas.getContext('2d');
-                var strokeStyle = "#4bf";
 
                 // variable that decides if something should be drawn on mousemove
                 var drawing = false;
@@ -46,7 +45,7 @@ angular.module('pwfApp.directives', [])
                         currentX = position.x;
                         currentY = position.y;
 
-                        draw(lastX, lastY, currentX, currentY);
+                        draw(lastX, lastY, currentX, currentY, drawingApi.color);
 
                         // set current coordinates to last one
                         lastX = currentX;
@@ -79,7 +78,7 @@ angular.module('pwfApp.directives', [])
                                 ctx.beginPath();
                                 ctx.moveTo((segment.xFrom / 1000) * canvas.width, (segment.yFrom / 1000) * canvas.height);
                                 ctx.lineTo((segment.xTo / 1000) * canvas.width, (segment.yTo / 1000) * canvas.height);
-                                ctx.strokeStyle = strokeStyle;
+                                ctx.strokeStyle = segment.color;
                                 ctx.stroke();
                             }
                         }
@@ -91,8 +90,9 @@ angular.module('pwfApp.directives', [])
                     element[0].width = element[0].width;
                 }
 
-                function addSegment(xFrom, yFrom, xTo, yTo) {
+                function addSegment(xFrom, yFrom, xTo, yTo, color) {
                     var segment = {
+                        color: color,
                         xFrom: ((xFrom / canvas.width) * 1000 | 0),
                         yFrom: ((yFrom / canvas.height) * 1000 | 0),
                         xTo: ((xTo / canvas.width) * 1000 | 0),
@@ -103,17 +103,17 @@ angular.module('pwfApp.directives', [])
                     drawingApi.segmentHistory.push(segment);
                 }
 
-                function draw(lX, lY, cX, cY) {
+                function draw(lX, lY, cX, cY, color) {
                     // line from
                     ctx.moveTo(lX, lY);
                     // to
                     ctx.lineTo(cX, cY);
                     // color
-                    ctx.strokeStyle = strokeStyle;
+                    ctx.strokeStyle = color;
                     // draw it
                     ctx.stroke();
                     // add the segment to the array 
-                    addSegment(lX, lY, cX, cY);
+                    addSegment(lX, lY, cX, cY, color);
                 }
 
                 // Get the coordinates crossbrowser for a mouse or touch event
@@ -149,11 +149,28 @@ angular.module('pwfApp.directives', [])
 
                 function resize(elem) {
                     var canvas = elem[0];
-                    var parentDiv = elem.parent()[0];
-                    canvas.width = parentDiv.clientWidth;
-                    canvas.height = parentDiv.clientHeight;
+                    var parentDiv = elem.parent();
+                    canvas.width = parentDiv.width();
+                    canvas.height = parentDiv.height();
                 }
             }
         };
-    }]);
+    }])
+    .directive('colorbuttons', function () {
+    return {
+        restrict: 'E',
+        scope: { model: '=', options: '=' },
+        controller: function ($scope) {
+            $scope.activate = function (option) {
+                $scope.model = option;
+            };
+        },
+        template: "<label class='btn btn-default'" +
+        "ng-class='{active: option == model}'" +
+        "ng-repeat='option in options' " +
+        "ng-click='activate(option)'>" +
+        "<input type='radio' name='{{name}}'>{{option}}" +
+        "</label>"
+    };
+});​
 

@@ -4,16 +4,21 @@
 
     var controllerId = 'chatController';
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', chatController]);
+    angular.module('pwfApp').controller(controllerId, ['$scope', 'gameHubFactory', chatController]);
 
-    function chatController($scope) {
+    function chatController($scope, gameHubFactory) {
         var vm = this;
+        vm.players = [];
 
-        vm.activate = activate;
-        vm.title = 'chatController';
+        gameHubFactory.subscribe('playerJoined', function (player) {
+            vm.players.push(player);
+        });
 
-        function activate() {
-        }
+        vm.join = function (userName) {
+            gameHubFactory.execute('join', userName, function (player) {
+                vm.player = player;
+            });
+        };
     }
 })();
 //# sourceMappingURL=chatController.js.map

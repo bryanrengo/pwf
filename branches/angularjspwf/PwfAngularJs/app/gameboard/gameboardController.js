@@ -8,6 +8,18 @@
 
     function gameboardController($scope, $timeout, $interval, gameHubFactory, drawingApi) {
         var vm = this;
+        vm.colors = [
+            '#4bf',
+            'blue',
+            'yellow',
+            'red',
+            'purple',
+            'black'
+        ];
+
+        vm.color = '#4bf';
+
+        drawingApi.color = vm.color;
 
         gameHubFactory.subscribe('drawSegments', function (segments) {
             drawingApi.updateSegments(segments);
@@ -20,6 +32,10 @@
                 drawingApi.segments = [];
             }
         }, 50);
+
+        $scope.$watch('vm.color', function (newVal, oldVal) {
+            drawingApi.color = vm.color;
+        });
 
         return vm;
     }

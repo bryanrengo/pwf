@@ -23,7 +23,11 @@ namespace App
 
         public Player Join(string playerName)
         {
-            return GameState.Instance.GetOrAddPlayer(Context.ConnectionId, playerName);
+            Player player = GameState.Instance.GetOrAddPlayer(Context.ConnectionId, playerName);
+
+            Clients.All.playerJoined(player);
+
+            return player;
         }
 
         public IEnumerable<Game> GetGames()

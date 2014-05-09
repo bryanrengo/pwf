@@ -42,8 +42,10 @@ namespace App.Hubs.Models
 
         public IEnumerable<Game> GetAllGames()
         {
+#if DEBUG
             games.AddOrUpdate("test", new Game() { GameId = "test", GameInstanceName = "test name" }, (id, game) => game);
             games.AddOrUpdate("test1", new Game() { GameId = "test1", GameInstanceName = "test1 name" }, (id, game) => game);
+#endif
 
             return games.Values;
         }

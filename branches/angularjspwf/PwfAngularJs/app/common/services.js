@@ -83,6 +83,7 @@ angular.module('pwfApp.services', []).constant('$', $).factory('authInterceptor'
     var callback;
     var segments = [];
     var segmentHistory = [];
+    var color = '';
 
     function drawSegments(callback) {
         this.callback = callback;
@@ -99,6 +100,7 @@ angular.module('pwfApp.services', []).constant('$', $).factory('authInterceptor'
     return {
         segments: segments,
         segmentHistory: segmentHistory,
+        color: color,
         updateSegments: updateSegments,
         drawSegments: drawSegments
     };

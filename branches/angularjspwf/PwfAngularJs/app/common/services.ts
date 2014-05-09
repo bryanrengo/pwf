@@ -93,6 +93,7 @@ angular.module('pwfApp.services', [])
         var callback;
         var segments = [];
         var segmentHistory = [];
+        var color = '';
 
         function drawSegments(callback) {
             this.callback = callback;
@@ -109,6 +110,7 @@ angular.module('pwfApp.services', [])
         return {
             segments: segments,
             segmentHistory: segmentHistory,
+            color: color,
             updateSegments: updateSegments,
             drawSegments: drawSegments
         }

@@ -11,8 +11,8 @@ angular.module('pwfApp', ['pwfApp.filters', 'pwfApp.services', 'pwfApp.directive
             $routeProvider
                 .when('/', { templateUrl: 'app/main/mainView', controller: 'mainController' })
                 .when('/login', { templateUrl: 'app/login/loginview', controller: 'loginController' })
-                .when('/chat', { templateUrl: 'app/chat/chatview', controller: 'chatController' })
-                .when('/game', { templateUrl: 'app/gameboard/gameboardview', controller: 'gameboardController' })
+                .when('/chat', { templateUrl: 'app/chat/chatview', controller: 'chatController', controllerAs: 'vm'  })
+                .when('/game', { templateUrl: 'app/gameboard/gameboardview', controller: 'gameboardController', controllerAs: 'vm' })
                 .when('/list', { templateUrl: 'app/gamelist/gamelistview', controller: 'gameListController' })
                 .when('/map', { templateUrl: 'app/map/mapview', controller: 'mapController' })
                 .otherwise({ redirectTo: '/' });
