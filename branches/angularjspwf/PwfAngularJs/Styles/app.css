@@ -34,9 +34,11 @@
 .chat-container {
   height: 400px;
 }
-/*.draw { 
-    cursor: pointer;
-}*/
+.draw {
+  cursor: pointer;
+  border: 1px dotted black;
+  border-radius: 5px;
+}
 .draw:active {
   cursor: url(/images/paintbrush.png), url(images/paintbrush.png), auto;
 }

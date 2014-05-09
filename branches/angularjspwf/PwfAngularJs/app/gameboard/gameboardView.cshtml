@@ -1,15 +1,18 @@
-﻿<h2>GameBoard View</h2>
-
-<div class="well-sm game-container">
-    <div class="col-xs-10 canvas-container">
-        <drawing class="draw" />
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>GameBoard View</h4>
     </div>
-    <div class="col-xs-2">
-        <div class="pull-right">
-            <colorbuttons class="btn-group-vertical"
-                          data-toggle="buttons"
-                          model="vm.color"
-                          options="vm.colors" />
+    <div class="panel-body game-container">
+        <div class="col-xs-10" style="height:370px;">
+            <drawing class="draw" />
+        </div>
+        <div class="col-xs-2">
+            <div class="pull-right">
+                <colorbuttons class="btn-group-vertical"
+                              data-toggle="buttons"
+                              model="vm.color"
+                              options="vm.colors" />
+            </div>
         </div>
     </div>
 </div>

@@ -1,21 +1,25 @@
-﻿<h2>Chat View</h2>
-
-<div class="well chat-container">
-    <div class="row">
-        <div class="col-md-9">test overlap</div>
-        <div class="col-md-3">
-            <ul>
-                <li ng-repeat="player in vm.players">
-                    {{player.Name}}
-                </li>
-            </ul>
-        </div>
+﻿<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Chat View</h4>
     </div>
-
-    <div class="row">
-        <form ng-submit="vm.join(userName)">
-            <input type="text" ng-model="userName" />
-            <input type="submit" />
-        </form>
+    <div class="panel-body chat-container">
+        <div class="row">
+            <div class="col-md-9">test overlap</div>
+            <div class="col-md-3">
+                <ul>
+                    <li ng-repeat="player in vm.players">
+                        {{player.Name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form ng-submit="vm.join(userName)">
+                    <input type="text" ng-model="userName" />
+                    <input type="submit" />
+                </form>
+            </div>
+        </div>
     </div>
 </div>
