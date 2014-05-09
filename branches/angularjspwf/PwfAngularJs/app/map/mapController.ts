@@ -8,7 +8,7 @@
 
     function mapController($scope, geolocation) {
         var vm = this;
-
+         
         angular.extend($scope, {
             map: {
                 control: {},
@@ -65,11 +65,11 @@
             var northeast = newVal.northeast;
             var southwest = newVal.southwest;
 
-            var randLatitude = randomDecimalFromInterval(
+            var randLatitude = randomDecimalBetween(
                 southwest.latitude,
                 northeast.latitude);
 
-            var randLongitude = randomDecimalFromInterval(
+            var randLongitude = randomDecimalBetween(
                 northeast.longitude,
                 southwest.longitude);
 
@@ -82,7 +82,7 @@
         }, true);
     }
 
-    function randomDecimalFromInterval(min, max) {
+    function randomDecimalBetween(min, max) {
         return Math.random() * (max - min) + min;
     }
 })();

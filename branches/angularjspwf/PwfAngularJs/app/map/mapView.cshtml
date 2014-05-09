@@ -7,14 +7,20 @@
                 control="map.control"
                 bounds="map.bounds"
                 options="map.options">
+
+        <layer type="TrafficLayer"
+               show="true">
+        </layer>
+
         <markers models="map.markers"
                  coords="'self'">
         </markers>
+
     </google-map>
 </div>
 <div class="row">
     <h4>Boundary</h4>
-    South West: {{map.bounds.southwest}}<br/>
+    South West: {{map.bounds.southwest}}<br />
     North East: {{map.bounds.northeast}}
 </div>
 <div class="row">
@@ -22,8 +28,8 @@
     <p>move the map around, or zoom in/out to add more markers</p>
     <ul>
         <li ng-repeat="marker in map.markers">
-            
-            Latitude: {{marker.latitude}}<br/>
+
+            Latitude: {{marker.latitude}}<br />
             Longitude: {{marker.longitude}}
         </li>
     </ul>

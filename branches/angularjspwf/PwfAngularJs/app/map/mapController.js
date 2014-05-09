@@ -64,9 +64,9 @@
             var northeast = newVal.northeast;
             var southwest = newVal.southwest;
 
-            var randLatitude = randomDecimalFromInterval(southwest.latitude, northeast.latitude);
+            var randLatitude = randomDecimalBetween(southwest.latitude, northeast.latitude);
 
-            var randLongitude = randomDecimalFromInterval(northeast.longitude, southwest.longitude);
+            var randLongitude = randomDecimalBetween(northeast.longitude, southwest.longitude);
 
             //$scope.map.markers = [];
             $scope.map.markers.push({
@@ -76,7 +76,7 @@
         }, true);
     }
 
-    function randomDecimalFromInterval(min, max) {
+    function randomDecimalBetween(min, max) {
         return Math.random() * (max - min) + min;
     }
 })();
