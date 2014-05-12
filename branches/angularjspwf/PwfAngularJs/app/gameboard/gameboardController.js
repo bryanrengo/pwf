@@ -17,25 +17,43 @@
             'black'
         ];
 
+        //gamehub subscriptions
+        gameHubFactory.subscribe('clearBoard', clearBoard);
+        gameHubFactory.subscribe('drawSegments', updateSegments);
+        gameHubFactory.subscribe('updateColor', updateColor);
+
+        $interval(sendSegments, 50);
+        $scope.$watch('vm.color', sendColor);
         vm.color = '#4bf';
+        vm.clearBoard = sendClearBoard;
 
-        drawingApi.color = vm.color;
+        function sendClearBoard() {
+            gameHubFactory.execute('clearBoard');
+        }
 
-        gameHubFactory.subscribe('drawSegments', function (segments) {
-            drawingApi.updateSegments(segments);
-        });
+        function sendColor(newVal, oldVal) {
+            gameHubFactory.execute('sendColor', newVal);
+        }
 
-        // this function fires every 50 milliseconds
-        $interval(function () {
+        function sendSegments() {
             if (drawingApi.segments && drawingApi.segments.length > 0) {
                 gameHubFactory.execute('sendSegments', drawingApi.segments);
                 drawingApi.segments = [];
             }
-        }, 50);
+        }
 
-        $scope.$watch('vm.color', function (newVal, oldVal) {
-            drawingApi.color = vm.color;
-        });
+        function clearBoard() {
+            drawingApi.clearBoard();
+        }
+
+        function updateColor(color) {
+            drawingApi.color = color;
+            vm.color = color;
+        }
+
+        function updateSegments(segments) {
+            drawingApi.updateSegments(segments);
+        }
 
         return vm;
     }

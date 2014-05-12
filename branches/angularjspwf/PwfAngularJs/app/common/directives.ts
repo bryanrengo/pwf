@@ -68,6 +68,10 @@ angular.module('pwfApp.directives', [])
                     drawSegments(segments);
                 });
 
+                drawingApi.clearBoardCallback = function () {
+                    reset();
+                };
+
                 function drawSegments(segments) {
                     if (segments) {
                         for (var i = 0; i < segments.length; i++) {

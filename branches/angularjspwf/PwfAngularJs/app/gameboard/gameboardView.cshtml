@@ -6,13 +6,14 @@
         <div class="col-xs-10" style="height:370px;">
             <drawing class="draw" />
         </div>
-        <div class="col-xs-2">
-            <div class="pull-right">
-                <colorbuttons class="btn-group-vertical"
+        <div class="col-xs-2" style="height:370px;">
+            <div class="center-block" style="height:335px;">
+                <colorbuttons class="btn-group-vertical center-block"
                               data-toggle="buttons"
                               model="vm.color"
                               options="vm.colors" />
             </div>
+            <button type="button" class="btn btn-default btn-block" style="bottom:5px;" ng-click="vm.clearBoard()">reset</button>
         </div>
     </div>
 </div>

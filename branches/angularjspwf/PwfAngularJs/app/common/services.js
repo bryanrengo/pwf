@@ -80,20 +80,29 @@ angular.module('pwfApp.services', []).constant('$', $).factory('authInterceptor'
     'signalRHub', function (signalRHub) {
         return new signalRHub('gameHub');
     }]).factory('drawingApi', function () {
-    var callback;
+    var segmentCallback;
+    var clearBoardCallback;
     var segments = [];
     var segmentHistory = [];
     var color = '';
 
-    function drawSegments(callback) {
-        this.callback = callback;
+    function drawSegments(segmentCallback) {
+        this.segmentCallback = segmentCallback;
     }
 
     function updateSegments(segments) {
-        if (this.callback) {
-            this.callback(segments);
+        if (this.segmentCallback) {
+            this.segmentCallback(segments);
             this.segmentHistory = this.segmentHistory.concat(segments);
             this.segments = [];
+        }
+    }
+
+    function clearBoard() {
+        this.segments = [];
+        this.segmentHistory = [];
+        if (this.clearBoardCallback) {
+            this.clearBoardCallback();
         }
     }
 
@@ -102,7 +111,9 @@ angular.module('pwfApp.services', []).constant('$', $).factory('authInterceptor'
         segmentHistory: segmentHistory,
         color: color,
         updateSegments: updateSegments,
-        drawSegments: drawSegments
+        drawSegments: drawSegments,
+        clearBoard: clearBoard,
+        clearBoardCallback: clearBoardCallback
     };
 });
 //# sourceMappingURL=services.js.map

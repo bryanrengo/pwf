@@ -39,5 +39,15 @@ namespace App
         {
             return GameState.Instance.GetOrCreateGame(gameId).Players;
         }
+
+        public void ClearBoard()
+        {
+            Clients.All.clearBoard();
+        }
+
+        public void SendColor(string color)
+        {
+            Clients.AllExcept(Context.ConnectionId).updateColor(color);
+        }
     }
 }
