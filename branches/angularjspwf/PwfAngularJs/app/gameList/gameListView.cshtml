@@ -1,8 +1,8 @@
 ﻿<h2>GameBoard View</h2>
 
-<div ng-controller="gameListController">
+<div ng-controller="gameListController as vm">
     <ul>
-        <li ng-repeat="game in games">
+        <li ng-repeat="game in vm.games">
             <span>{{game.GameInstanceName}}</span>
         </li>
     </ul>

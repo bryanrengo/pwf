@@ -1,11 +1,11 @@
 ﻿/// <reference path="../../scripts/_references.ts" />
 
 (function () {
-    'use strict';
+    "use strict";
 
-    var controllerId = 'mainController';
+    var controllerId = "mainController";
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', mainController]);
+    angular.module("pwfApp").controller(controllerId, ["$scope", mainController]);
 
     function mainController($scope) {
         var vm = this;

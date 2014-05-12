@@ -47,7 +47,12 @@ namespace App
 
         public void SendColor(string color)
         {
-            Clients.AllExcept(Context.ConnectionId).updateColor(color);
+            Clients.All.updateColor(color);
+        }
+
+        public void SendMessage(string message)
+        {
+            Clients.All.messageSent(message);
         }
     }
 }

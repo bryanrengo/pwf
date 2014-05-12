@@ -14,13 +14,13 @@ namespace App
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new Bundle("~/js/libs").Include(
-                "~/scripts/angular.js",
-                "~/scripts/angular-route.js",
-                "~/scripts/jquery-{version}.js",
-                "~/scripts/underscore.js",
-                "~/scripts/bootstrap.js",
-                "~/scripts/jquery.signalr-{version}.js",
-                "~/scripts/angular-google-maps.js",
+                "~/scripts/angular/angular.js",
+                "~/scripts/angular/angular-route.js",
+                "~/scripts/jquery/jquery-{version}.js",
+                "~/scripts/underscore/underscore.js",
+                "~/scripts/bootstrap/bootstrap.js",
+                "~/scripts/signalr/jquery.signalr-{version}.js",
+                "~/scripts/angular/angular-google-maps.js",
                 "~/scripts/geolocation.js"));
 
             bundles.Add(new Bundle("~/js/app")

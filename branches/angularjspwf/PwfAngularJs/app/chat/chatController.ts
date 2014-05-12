@@ -9,16 +9,35 @@
 
     function chatController($scope, gameHubFactory) {
         var vm = this;
+
+        gameHubFactory.subscribe('playerJoined', playerJoined);
+
+        gameHubFactory.subscribe('messageSent', messageSent);
+
         vm.players = [];
 
-        gameHubFactory.subscribe('playerJoined', function (player) {
-            vm.players.push(player);
-        });
+        vm.messages = [];
 
-        vm.join = function (userName) {
-            gameHubFactory.execute('join', userName, function (player) {
-                vm.player = player;
-            });
+        vm.join = join;
+
+        function messageSent(message) {
+            vm.messages.push(message);
+        }
+
+        function sendMessage(message) {
+            gameHubFactory.execute('sendMessage', message);
+        }
+
+        function join(userName) {
+            gameHubFactory.execute('join', userName, playerJoinedCallback);
+        }
+
+        function playerJoinedCallback(player) {
+            vm.player = player;
         };
+
+        function playerJoined(player) {
+            vm.players.push(player);
+        }
     }
 })();

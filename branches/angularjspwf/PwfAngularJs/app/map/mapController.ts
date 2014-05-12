@@ -1,10 +1,10 @@
 ﻿(function () {
-    'use strict';
+    "use strict";
 
-    var controllerId = 'mapController';
+    var controllerId = "mapController";
 
-    angular.module('pwfApp').controller(controllerId,
-        ['$scope', 'geolocation', mapController]);
+    angular.module("pwfApp").controller(controllerId,
+        ["$scope", "geolocation", mapController]);
 
     function mapController($scope, geolocation) {
         var vm = this;
@@ -27,22 +27,22 @@
                     styles: [
                         {
                             stylers: [
-                                { hue: '#890000' },
-                                { visibility: 'simplified' },
+                                { hue: "#890000" },
+                                { visibility: "simplified" },
                                 { gamma: 0.5 },
                                 { weight: 0.5 }
                             ]
                         },
                         {
-                            elementType: 'labels',
+                            elementType: "labels",
                             stylers: [
-                                { visibility: 'off' }
+                                { visibility: "off" }
                             ]
                         },
                         {
-                            featureType: 'water',
+                            featureType: "water",
                             stylers: [
-                                { color: '#890000' }
+                                { color: "#890000" }
                             ]
                         }
                     ]
@@ -59,7 +59,7 @@
                 });
         });
 
-        $scope.$watch('map.bounds', function (newVal, oldVal) {
+        $scope.$watch("map.bounds", function (newVal, oldVal) {
             if (!newVal.northeast && !newVal.southwest) return;
 
             var northeast = newVal.northeast;
@@ -72,8 +72,6 @@
             var randLongitude = randomDecimalBetween(
                 northeast.longitude,
                 southwest.longitude);
-
-            //$scope.map.markers = [];
 
             $scope.map.markers.push({
                 latitude: randLatitude,
