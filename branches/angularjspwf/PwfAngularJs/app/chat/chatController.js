@@ -13,31 +13,26 @@
 
         gameHubFactory.subscribe('messageSent', messageSent);
 
-        vm.players = [];
-
-        vm.messages = [];
-
-        vm.join = join;
+        vm.model = {
+            players: [],
+            messages: [],
+            message: '',
+            sendMessage: sendMessage
+        };
 
         function messageSent(message) {
-            vm.messages.push(message);
+            vm.model.messages.push(message);
+            $scope.$apply();
         }
 
-        function sendMessage(message) {
-            gameHubFactory.execute('sendMessage', message);
+        function sendMessage() {
+            gameHubFactory.execute('sendMessage', vm.model.message, function () {
+                vm.model.message = '';
+            });
         }
-
-        function join(userName) {
-            gameHubFactory.execute('join', userName, playerJoinedCallback);
-        }
-
-        function playerJoinedCallback(player) {
-            vm.player = player;
-        }
-        ;
 
         function playerJoined(player) {
-            vm.players.push(player);
+            vm.model.players.push(player);
         }
     }
 })();

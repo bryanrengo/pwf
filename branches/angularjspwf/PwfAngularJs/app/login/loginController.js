@@ -1,16 +1,16 @@
 ﻿/// <reference path="../../scripts/_references.ts" />
 (function () {
-    'use strict';
+    "use strict";
 
-    var controllerId = 'loginController';
+    var controllerId = "loginController";
 
-    angular.module('pwfApp').controller(controllerId, ['$scope', loginController]);
+    angular.module("pwfApp").controller(controllerId, ["$scope", loginController]);
 
     function loginController($scope) {
         var vm = this;
 
         vm.login = login;
-        vm.title = 'loginController';
+        vm.title = "loginController";
 
         function login(user) {
         }

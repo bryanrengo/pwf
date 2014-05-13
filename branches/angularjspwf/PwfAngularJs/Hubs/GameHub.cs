@@ -30,6 +30,11 @@ namespace App
             return player;
         }
 
+        public bool PlayerExists(string playerName)
+        {
+            return GameState.Instance.PlayerExists(playerName);
+        }
+
         public IEnumerable<Game> GetGames()
         {
             return GameState.Instance.GetAllGames();

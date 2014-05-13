@@ -161,20 +161,39 @@ angular.module('pwfApp.directives', [])
         };
     }])
     .directive('colorbuttons', function () {
-    return {
-        restrict: 'E',
-        scope: { model: '=', options: '=' },
-        controller: function ($scope) {
-            $scope.activate = function (option) {
-                $scope.model = option;
-            };
-        },
-        template: "<label class='btn btn-default'" +
-        "ng-class='{active: option == model}'" +
-        "ng-repeat='option in options' " +
-        "ng-click='activate(option)'>" +
-        "<input type='radio' name='{{name}}'>{{option}}" +
-        "</label>"
-    };
-});​
-
+        return {
+            restrict: 'E',
+            scope: { model: '=', options: '=' },
+            controller: function ($scope) {
+                $scope.activate = function (option) {
+                    $scope.model = option;
+                };
+            },
+            template: "<label class='btn btn-default'" +
+            "ng-class='{active: option == model}'" +
+            "ng-repeat='option in options' " +
+            "ng-click='activate(option)'>" +
+            "<input type='radio' name='{{name}}'>{{option}}" +
+            "</label>"
+        };
+    })
+    .directive('focus', function ($timeout, $parse) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                scope.$watch(attrs.focus, function (newValue, oldValue) {
+                    if (newValue === '') { element[0].focus(); }
+                });
+                //element.bind("blur", function (e) {
+                //    $timeout(function () {
+                //        scope.$apply(attrs.focus + "=false");
+                //    }, 0);
+                //});
+                //element.bind("focus", function (e) {
+                //    $timeout(function () {
+                //        scope.$apply(attrs.focus + "=true");
+                //    }, 0);
+                //})
+            }
+        }
+  });

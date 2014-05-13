@@ -1,0 +1,23 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title">It appears you have not joined yet, please join now!</h4>
+</div>
+<form name="userForm" ng-submit="ok(user)">
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="userName">Player Name</label>
+            <input 
+                   id="userName" 
+                   type="text" 
+                   class="form-control" 
+                   placeholder="Enter player name" 
+                   ng-model="user.name" 
+                   name="name"
+                   required/>
+
+            <small class="error" ng-show="userForm.user.name.$error.unique">That username is taken, please try another</small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Join</button>
+    </div>
+</form>

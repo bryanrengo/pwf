@@ -71,5 +71,10 @@ namespace App.Hubs.Models
             // if not, create and add
             return retPlayer;
         }
+
+        public bool PlayerExists(string playerName)
+        {
+            return players.Values.Any(p => p.Name == playerName);
+        }
     }
 }

@@ -3,17 +3,17 @@
         <h4>Chat View</h4>
     </div>
     <div class="panel-body chat-container">
-        <div class="row">
+        <div class="row" style="height:335px;">
             <div class="col-md-9">
-                <ul class="list-group">
-                    <li ng-repeat="message in vm.messages">
+                <ul>
+                    <li ng-repeat="message in vm.model.messages">
                         {{message}}
                     </li>
                 </ul>
             </div>
             <div class="col-md-3">
                 <ul>
-                    <li ng-repeat="player in vm.players">
+                    <li ng-repeat="player in vm.model.players">
                         {{player.Name}}
                     </li>
                 </ul>
@@ -21,9 +21,13 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form ng-submit="vm.join(userName)">
-                    <input type="text" ng-model="userName" />
-                    <input type="submit" value="join" />
+                <form ng-submit="vm.model.sendMessage(vm.model.message)">
+                    <div class="col-sm-10">
+                        <input type="text" ng-model="vm.model.message" class="form-control" focus="vm.model.message" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="submit" value="send" class="btn btn-default btn-block" />
+                    </div>
                 </form>
             </div>
         </div>

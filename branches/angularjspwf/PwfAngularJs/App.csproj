@@ -171,6 +171,7 @@
     </Content>
     <Content Include="app\gameList\gameListView.cshtml" />
     <Content Include="app\map\mapView.cshtml" />
+    <Content Include="app\main\loginModalView.cshtml" />
     <None Include="Scripts\jquery\jquery-1.9.1.intellisense.js" />
     <Content Include="Images\mapmarker-noalpha.png" />
     <Content Include="Images\paintbrush.png" />

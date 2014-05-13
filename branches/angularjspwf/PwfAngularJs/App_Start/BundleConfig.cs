@@ -19,8 +19,9 @@ namespace App
                 "~/scripts/jquery/jquery-{version}.js",
                 "~/scripts/underscore/underscore.js",
                 "~/scripts/bootstrap/bootstrap.js",
-                "~/scripts/signalr/jquery.signalr-{version}.js",
+                "~/scripts/angular-ui/ui-bootstrap-tpls.js",
                 "~/scripts/angular/angular-google-maps.js",
+                "~/scripts/signalr/jquery.signalr-{version}.js",
                 "~/scripts/geolocation.js"));
 
             bundles.Add(new Bundle("~/js/app")
