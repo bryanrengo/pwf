@@ -14,14 +14,14 @@ namespace App
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new Bundle("~/js/libs").Include(
-                "~/scripts/angular/angular.js",
-                "~/scripts/angular/angular-route.js",
-                "~/scripts/jquery/jquery-{version}.js",
-                "~/scripts/underscore/underscore.js",
-                "~/scripts/bootstrap/bootstrap.js",
-                "~/scripts/angular-ui/ui-bootstrap-tpls.js",
-                "~/scripts/angular/angular-google-maps.js",
-                "~/scripts/signalr/jquery.signalr-{version}.js",
+                "~/scripts/angular.js",
+                "~/scripts/angular-route.js",
+                "~/scripts/jquery-{version}.js",
+                "~/scripts/underscore.js",
+                "~/scripts/bootstrap.js",
+                "~/scripts/ui-bootstrap-tpls.js",
+                "~/scripts/angular-google-maps.js",
+                "~/scripts/jquery.signalr-{version}.js",
                 "~/scripts/geolocation.js"));
 
             bundles.Add(new Bundle("~/js/app")
@@ -35,8 +35,8 @@ namespace App
                 .IncludeDirectory(directoryVirtualPath: "~/app/map", searchPattern: "*.js"));
 
             bundles.Add(new Bundle("~/css/app").Include(
-                "~/styles/app.css",
-                "~/styles/bootstrap.css"));
+                "~/content/app.css",
+                "~/content/bootstrap/bootstrap.css"));
         }
     }
 }

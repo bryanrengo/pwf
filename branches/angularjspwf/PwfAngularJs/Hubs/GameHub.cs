@@ -57,7 +57,19 @@ namespace App
 
         public void SendMessage(string message)
         {
-            Clients.All.messageSent(message);
+            Player player = GameState.Instance.GetPlayer(Context.ConnectionId);
+            ChatMessage chatMessage = null;
+
+            if (player == null)
+            {
+                chatMessage = new ChatMessage(string.Empty, message);
+            }
+            else
+            {
+                chatMessage = new ChatMessage(player.Name, message);
+            }
+
+            Clients.All.messageSent(chatMessage);
         }
     }
 }

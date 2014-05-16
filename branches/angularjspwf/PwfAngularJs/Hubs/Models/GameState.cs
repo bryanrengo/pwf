@@ -72,6 +72,15 @@ namespace App.Hubs.Models
             return retPlayer;
         }
 
+        public Player GetPlayer(string playerConnectionId)
+        {
+            Player retPlayer = null;
+
+            players.TryGetValue(playerConnectionId, out retPlayer);
+
+            return retPlayer;
+        }
+
         public bool PlayerExists(string playerName)
         {
             return players.Values.Any(p => p.Name == playerName);

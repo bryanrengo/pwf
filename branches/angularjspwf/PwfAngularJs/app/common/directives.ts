@@ -184,16 +184,19 @@ angular.module('pwfApp.directives', [])
                 scope.$watch(attrs.focus, function (newValue, oldValue) {
                     if (newValue === '') { element[0].focus(); }
                 });
-                //element.bind("blur", function (e) {
-                //    $timeout(function () {
-                //        scope.$apply(attrs.focus + "=false");
-                //    }, 0);
-                //});
-                //element.bind("focus", function (e) {
-                //    $timeout(function () {
-                //        scope.$apply(attrs.focus + "=true");
-                //    }, 0);
-                //})
             }
         }
-  });
+    })
+    .directive('chatMessagePopover', function () {
+        return {
+            link: function (scope, elem, attrs) {
+                elem.bind('keydown keypress', function (event) {
+                    if (event.which === 38) {
+                        // up key pressed
+                    } else if (event.which === 40) {
+                        // down key pressed
+                    }
+                });
+            }
+        }
+    });

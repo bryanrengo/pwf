@@ -7,7 +7,7 @@
             <div class="col-md-9">
                 <ul>
                     <li ng-repeat="message in vm.model.messages">
-                        {{message}}
+                        {{message.Message}}
                     </li>
                 </ul>
             </div>
@@ -22,10 +22,10 @@
         <div class="row">
             <div class="col-md-12">
                 <form ng-submit="vm.model.sendMessage(vm.model.message)">
-                    <div class="col-sm-10">
-                        <input type="text" ng-model="vm.model.message" class="form-control" focus="vm.model.message" />
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="vm.model.message" class="form-control" focus="vm.model.message" autocomplete="off" chat-message-popover />
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <input type="submit" value="send" class="btn btn-default btn-block" />
                     </div>
                 </form>
